@@ -10,15 +10,15 @@ class TestOutputHelper {
         return getPrintServiceCallSpacer() + "   "
     }
 
-    static def printServiceCall(def apiService){
+    static def printServiceCall(String apiService){
         println(getPrintServiceCallSpacer() + apiService)
     }
 
-    static def printRestCall(def outputString){
-        println(getPrintRestCallSpacer() + outputString)
+    static def printRestCall(String outputString){
+        println("${getPrintRestCallSpacer()}${outputString}")
     }
 
-    static def printRestCallIndent(def outputString){
-        printRestCall(getPrintRestCallSpacer() + outputString)
+    static def printRestCallIndent(String outputString){
+        printRestCall("${getPrintRestCallSpacer()}${outputString}")
     }
 }
