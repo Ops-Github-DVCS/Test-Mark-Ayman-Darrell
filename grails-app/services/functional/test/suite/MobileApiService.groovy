@@ -1,5 +1,6 @@
 package functional.test.suite
 
+import com.cardfree.functionaltest.helpers.TestOutputHelper
 import grails.converters.JSON
 import grails.util.Holders
 import org.apache.commons.io.IOUtils
@@ -22,7 +23,7 @@ class MobileApiService {
     }
 
     def getNonRegisteredOauthToken() {
-        printServiceCall("Get unregistered oAuth Token")
+        TestOutputHelper.printServiceCall("Get unregistered oAuth Token")
         def data = [
                 grantType: "client_credentials",
                 client   : [
@@ -35,6 +36,11 @@ class MobileApiService {
             return oAuthResult.text
         }
         throw Exception("Could not provision non registered oAuth Token with id: ${getOAuthId()} and secret: ${getOAuthSecret()} for endpoint ${getOAuthEndpoint()}/oauth")
+    }
+
+    def getAccountManagementRequestEndpoint(){
+        def merchant = getTestMerchant()
+        config.api.address."$merchant" + config.api.account_management_application."$merchant"
     }
 
     def getOAuthEndpoint(){
@@ -56,20 +62,9 @@ class MobileApiService {
         System.getenv().merchant
     }
 
-    String getPrintServiceCallSpacer(){
-        return "   "
-    }
-
-    String getPrintRestCallSpacer(){
-        return getPrintServiceCallSpacer() + "   "
-    }
-
-    def printServiceCall(def apiService){
-        println(getPrintServiceCallSpacer() + apiService)
-    }
-
-    def printRestCall(def outputString){
-        println(getPrintRestCallSpacer() + outputString)
+    def executeMapiUserCreationRequest(def userData){
+        def header = [Authorization: "bearer ${getNonRegisteredOauthToken()}", Accept: "application/json"]
+        executeMapiRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
     def executeMapiRestRequest(String operation, path, root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
@@ -84,9 +79,9 @@ class MobileApiService {
         }()
 
         def fullPath = root + pathWithQuery
-        printRestCall(fullPath)
+        TestOutputHelper.printRestCall(fullPath)
         if(jsonObj){
-            printRestCall(jsonObj as JSON)
+            TestOutputHelper.printRestCall(jsonObj as JSON)
         }
 
         def method = {
@@ -115,8 +110,8 @@ class MobileApiService {
             def responseHeaders = [:]
             response.getAllHeaders().each { responseHeaders.put(it.name, it.value) }
             def responseContentType = responseHeaders ? responseHeaders."Content-Type" : ""
-            printRestCall(status)
-            printRestCall(responseString ? JSON.parse(responseString) : "")
+            TestOutputHelper.printRestCall(status)
+            TestOutputHelper.printRestCall(responseString ? JSON.parse(responseString) : "")
             return [
                     status: status,
                     text: responseString,
@@ -129,7 +124,7 @@ class MobileApiService {
                     responseHeaders: responseHeaders
             ]
         } catch(Exception e) {
-            printRestCall("Could not finish HTTP request.  Error below")
+            TestOutputHelper.printRestCall("Could not finish HTTP request.  Error below")
             println e.message
             e.printStackTrace()
             return [:]

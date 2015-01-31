@@ -85,6 +85,20 @@ grails.hibernate.pass.readonly = false
 // configure passing read-only to OSIV session by default, requires "singleSession = false" OSIV mode
 grails.hibernate.osiv.readonly = false
 
+userInformation{
+    emailPrefix = "johnnyfutah"
+    emailSuffix = "555@gmail.com"
+    firstName = "Jim"
+    lastName = "Test"
+    password = "Password1"
+    versionOfTerms = "1.1"
+    deviceIdentifier = "my-made-up-ip"
+    model = "iPhone"
+    operatingSystem = "iOS"
+    operatingSystemVersion = "6.0"
+    currencyCode = "USD"
+}
+
 environments {
     test_local {
         oauth {
