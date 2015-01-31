@@ -7,7 +7,7 @@ class GiftCardService extends MobileApiService {
     def creditCardService = new CreditCardService()
 
     def provisionGiftCardWithNewCC(Double amount, Boolean defaultCard, Boolean saveCC, token, CreditCardService.CreditCardType cardType, def inputPassword = config.userInformation.password){
-        def cardData = creditCardService.getTestCreditCard(cardType)
+        def cardData = creditCardService.getVisaCheckoutDetails()
         def data = [
                 registrationRequestType: "ProvisionWithFunds",
                 newCard                : [
@@ -19,11 +19,11 @@ class GiftCardService extends MobileApiService {
                         cardDesignId                     : 3,
                         customSuppliedUserDesign         : true,
                         customSuppliedUserDesignImageName: "test-me-image",
-                        checkoutDetails                  : cardData.data,
                         savePaymentInformation: saveCC
                         ],
                 password: inputPassword
                 ]
+        data.newCard.checkoutDetails = cardData
         return provisionGiftCard(data, token)
     }
 

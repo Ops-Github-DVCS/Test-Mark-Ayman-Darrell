@@ -81,7 +81,7 @@ class MobileApiService {
 
     def executeMapiRegisteredUserRequest(def operation, def path, def data, def token){
         def header = [Authorization: "bearer ${token}", Accept: "application/json"]
-        executeMapiRestRequest(operation, path, config.tacobell.root, data, header, "application/json")
+        executeMapiRestRequest(operation, "users/me/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
     }
 
     def executeMapiUserCreationRequest(def userData){
@@ -89,7 +89,7 @@ class MobileApiService {
         executeMapiRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
-    def executeMapiRestRequest(String operation, path, root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
+    def executeMapiRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
         def client = HttpClients.createDefault()
 
         def pathWithQuery = {
@@ -103,7 +103,7 @@ class MobileApiService {
         def fullPath = root + pathWithQuery
         TestOutputHelper.printRestCall(fullPath)
         if(jsonObj){
-            TestOutputHelper.printRestCall(jsonObj)
+            TestOutputHelper.printRestCall(jsonObj as JSON)
         }
 
         def method = {
