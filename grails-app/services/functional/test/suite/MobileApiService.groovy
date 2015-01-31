@@ -23,6 +23,7 @@ class MobileApiService {
     }
 
     def getNonRegisteredOauthToken() {
+        printServiceCall("Get unregistered oAuth Token")
         def data = [
                 grantType: "client_credentials",
                 client   : [
@@ -56,7 +57,21 @@ class MobileApiService {
         System.getenv().merchant
     }
 
+    String getPrintServiceCallSpacer(){
+        return "   "
+    }
 
+    String getPrintRestCallSpacer(){
+        return getPrintServiceCallSpacer() + "   "
+    }
+
+    def printServiceCall(def apiService){
+        println(getPrintServiceCallSpacer() + apiService)
+    }
+
+    def printRestCall(def outputString){
+        println(getPrintRestCallSpacer() + outputString)
+    }
 
     def executeMapiRestRequest(String operation, path, root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
         def client = HttpClients.createDefault()
@@ -70,7 +85,10 @@ class MobileApiService {
         }()
 
         def fullPath = root + pathWithQuery
-        println(fullPath)
+        printRestCall(fullPath)
+        if(jsonObj){
+            printRestCall(jsonObj as JSON)
+        }
 
         def method = {
             if(operation.toLowerCase()=="get") new HttpGet(fullPath)
@@ -86,21 +104,20 @@ class MobileApiService {
         }
         method.addHeader("Content-Type", contentType)
 
-//        println "Making ${operation} request to '${fullPath}' with params '${jsonObj}'"
         try {
             def response = client.execute(method)
             def status = response.statusLine
             def entity = response?.entity
-//            println "Received status ${status}"
             def inputStream = entity?.content
             def responseString = inputStream ? (IOUtils.toString(inputStream, "UTF-8") ?: "{}") : null
-//            println "Received response ${responseString}"
             if(entity){
                 EntityUtils.consume(entity)
             }
             def responseHeaders = [:]
             response.getAllHeaders().each { responseHeaders.put(it.name, it.value) }
             def responseContentType = responseHeaders ? responseHeaders."Content-Type" : ""
+            printRestCall(status)
+            printRestCall(responseString ? JSON.parse(responseString) : "")
             return [
                     status: status,
                     text: responseString,
@@ -112,9 +129,8 @@ class MobileApiService {
                     contentType: responseContentType,
                     responseHeaders: responseHeaders
             ]
-
         } catch(Exception e) {
-            println "Could not finish HTTP request.  Error below"
+            printRestCall("Could not finish HTTP request.  Error below")
             println e.message
             e.printStackTrace()
             return [:]
