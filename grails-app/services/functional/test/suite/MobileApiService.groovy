@@ -101,9 +101,10 @@ class MobileApiService {
         }()
 
         def fullPath = root + pathWithQuery
-        TestOutputHelper.printRestCall(fullPath)
+        TestOutputHelper.printRestCall("Request:")
+        TestOutputHelper.printRestCallIndent("${operation} -- ${fullPath}")
         if(jsonObj){
-            TestOutputHelper.printRestCall(jsonObj as JSON)
+            TestOutputHelper.printRestCallIndent(jsonObj as JSON)
         }
 
         def method = {
@@ -132,8 +133,9 @@ class MobileApiService {
             def responseHeaders = [:]
             response.getAllHeaders().each { responseHeaders.put(it.name, it.value) }
             def responseContentType = responseHeaders ? responseHeaders."Content-Type" : ""
-            TestOutputHelper.printRestCall(status)
-            TestOutputHelper.printRestCall(responseString ? JSON.parse(responseString) : "")
+            TestOutputHelper.printRestCall("Response: ")
+            TestOutputHelper.printRestCallIndent(status)
+            TestOutputHelper.printRestCallIndent(responseString ? JSON.parse(responseString) : "")
             return [
                     status: status,
                     text: responseString,
