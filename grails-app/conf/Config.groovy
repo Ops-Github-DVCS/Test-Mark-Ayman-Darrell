@@ -99,7 +99,12 @@ userInformation{
     currencyCode = "USD"
 }
 
-environments {
+testExecution {
+    merchant = "tacobell"
+    endpoint = "test_local"
+}
+
+testConfigurations{
     test_local {
         oauth {
             url {
@@ -198,6 +203,9 @@ environments {
             }
         }
     }
+}
+
+environments {
     development {
         grails.logging.jul.usebridge = true
     }
