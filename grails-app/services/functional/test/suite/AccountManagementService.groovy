@@ -43,4 +43,11 @@ class AccountManagementService {
         ]
         return data
     }
+
+    def static passesUserChecks(def userResult){
+        assert userResult?.status?.statusCode == 201
+        assert userResult?.json?.email?.contains("@")
+        assert !userResult?.json?.name?.isEmpty()
+        return true
+    }
 }
