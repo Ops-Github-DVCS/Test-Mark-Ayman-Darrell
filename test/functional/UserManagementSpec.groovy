@@ -4,14 +4,21 @@ import spock.lang.Specification
 class UserManagementSpec extends Specification{
 
     def accountManagementService = new AccountManagementService()
+    def userResult
 
     def "random user creation"(){
         when:
-        def userresult = accountManagementService.provisionNewRandomUser()
+        userResult = accountManagementService.provisionNewRandomUser()
 
         then:
-        userresult?.status?.statusCode == 201
-        userresult?.json?.email?.contains("@")
-        !userresult?.json?.name?.isEmpty()
+        passesUserChecks(userResult)
     }
+
+    def passesUserChecks(def userResult){
+        assert userResult?.status?.statusCode == 201
+        assert !userResult?.json?.email?.contains("@")
+        assert !userResult?.json?.name?.isEmpty()
+        return true
+    }
+
 }
