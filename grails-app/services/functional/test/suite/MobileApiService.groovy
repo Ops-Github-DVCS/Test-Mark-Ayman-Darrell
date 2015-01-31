@@ -38,28 +38,24 @@ class MobileApiService {
         throw Exception("Could not provision non registered oAuth Token with id: ${getOAuthId()} and secret: ${getOAuthSecret()} for endpoint ${getOAuthEndpoint()}/oauth")
     }
 
+    def getConfigurationPath(String path1, String path2){
+        return config.testConfigurations."$config.testExecution.endpoint"."$path1"."$path2"."$config.testExecution.merchant"
+    }
+
     def getAccountManagementRequestEndpoint(){
-        def merchant = getTestMerchant()
-        config.api.address."$merchant" + config.api.account_management_application."$merchant"
+        getConfigurationPath("api", "address") + getConfigurationPath("api", "account_management_application")
     }
 
     def getOAuthEndpoint(){
-        def merchant = getTestMerchant()
-        config.oauth.url."$merchant"
+        getConfigurationPath("oauth", "url")
     }
 
     def getOAuthId(){
-        def merchant = getTestMerchant()
-        config.oauth.id."$merchant"
+        getConfigurationPath("oauth", "id")
     }
 
     def getOAuthSecret(){
-        def merchant = getTestMerchant()
-        config.oauth.secret."$merchant"
-    }
-
-    def getTestMerchant(){
-        System.getenv().merchant
+        getConfigurationPath("oauth", "secret")
     }
 
     def executeMapiUserCreationRequest(def userData){
@@ -81,7 +77,7 @@ class MobileApiService {
         def fullPath = root + pathWithQuery
         TestOutputHelper.printRestCall(fullPath)
         if(jsonObj){
-            TestOutputHelper.printRestCall(jsonObj as JSON)
+            TestOutputHelper.printRestCall(jsonObj)
         }
 
         def method = {
