@@ -86,6 +86,104 @@ grails.hibernate.pass.readonly = false
 grails.hibernate.osiv.readonly = false
 
 environments {
+    test_local {
+        oauth {
+            url {
+                defaultVal = "https://dev01-app.cardfree.net/"
+                blimp = "https://dev01-app.cardfree.net/"
+                mono = "https://dev-mon-api01.cardfree.net/"
+            }
+            id {
+                blimp = "e28833aa-64df-4541-bd16-67d80d55b558"
+                mono = "D93B5A92DA0D11E3BF4B005056B046D7"
+            }
+            secret {
+                blimp = "03d91f77-973e-4d11-a3cb-ef860e12994e"
+                mono = "D9556C1DDA0D11E3BF4B005056B046D7"
+            }
+        }
+        svc {
+            url {
+                defaultVal = "http://localhost:8080/CardfreeSVC/v1/"
+            }
+            username {
+                defaultVal = "resttest"
+            }
+            password {
+                defaultVal = "0RAP%y@73qa4*IHD"
+            }
+        }
+        api {
+            address {
+                defaultVal = "http://192.168.82.128/"
+                blimp = "http://192.168.82.128/"
+            }
+            account_management_application {
+                defaultVal = "vsvm/"
+                blimp = "vsvm/"
+            }
+            order_management_application {
+                defaultVal = "vsvm_om/"
+                blimp = "vsvm_om/"
+            }
+        }
+    }
+    test_dev {
+        oauth {
+            url {
+                defaultVal = "https://dev01-app.cardfree.net/"
+                blimp = "https://dev01-app.cardfree.net/"
+                mono = "https://dev-mon-api01.cardfree.net/"
+            }
+            id {
+                blimp = "e28833aa-64df-4541-bd16-67d80d55b558"
+                mono = "D93B5A92DA0D11E3BF4B005056B046D7"
+            }
+            secret {
+                blimp = "03d91f77-973e-4d11-a3cb-ef860e12994e"
+                mono = "D9556C1DDA0D11E3BF4B005056B046D7"
+            }
+            api {
+                address {
+                    defaultVal = "http://dev01-app.cardfree.net"
+                    blimp = "http://dev01-app.cardfree.net/"
+                }
+                account_management_application {
+                    defaultVal = "account-management/v1/"
+                    blimp = "account-management/v1/"
+                }
+                order_management_application {
+                    defaultVal = "order-management/v1/"
+                    blimp = "order-management/v1/"
+                }
+            }
+        }
+        svc {
+            url {
+                defaultVal = "http://dev-cfr-app01.cardfree.net/CardfreeSVC/v1"
+            }
+            username {
+                defaultVal = "resttest"
+            }
+            password {
+                defaultVal = "0RAP%y@73qa4*IHD"
+            }
+        }
+    }
+    test_uat {
+        oauth {
+            url {
+                defaultVal = "https://uat-app.cardfree.net/"
+                blimp = "https://uat-app.cardfree.net/"
+            }
+            id {
+                blimp = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
+            }
+            secret {
+                blimp = "03d91f77-973e-4d11-a3cb-ef860e12994e"
+            }
+        }
+    }
     development {
         grails.logging.jul.usebridge = true
     }
