@@ -29,8 +29,7 @@ class GiftCardManagementSpec extends Specification{
         def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
 
         then:
-        addGCResult != null
-
+        GiftCardService.validateNewGiftCardResult(addGCResult)
     }
 
 }

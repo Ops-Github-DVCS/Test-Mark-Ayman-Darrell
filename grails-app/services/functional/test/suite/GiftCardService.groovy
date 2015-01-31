@@ -30,4 +30,11 @@ class GiftCardService extends MobileApiService {
     def provisionGiftCard(def data, def token){
         executeMapiRegisteredUserRequest("post", "gift-cards", data, token)
     }
+
+    def static validateNewGiftCardResult(addGCResult){
+        assert addGCResult.status.statusCode == 201
+        assert !addGCResult?.json?.cardId?.isEmpty()
+        assert !addGCResult?.json?.cardNumber?.isEmpty()
+        return true
+    }
 }
