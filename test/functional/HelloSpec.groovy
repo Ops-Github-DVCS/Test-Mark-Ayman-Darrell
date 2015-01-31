@@ -2,7 +2,7 @@ import spock.lang.Specification
 
 class HelloSpec extends Specification {
 
-    def "hello world"(){
+    def "spock configured"(){
         setup:
         def mathResult = 0
 
@@ -11,5 +11,15 @@ class HelloSpec extends Specification {
 
         then:
         mathResult == 2
+    }
+
+    def "read environment variables"(){
+        when:
+        def env = System.getenv()
+
+        then:
+        env.size() > 0
+        env.endpoint?.size() > 1
+        env.merchant?.size() > 1
     }
 }
