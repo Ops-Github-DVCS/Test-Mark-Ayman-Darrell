@@ -1,7 +1,6 @@
 package functional.test.suite
 
 import grails.converters.JSON
-import grails.transaction.Transactional
 import grails.util.Holders
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.methods.HttpDelete
