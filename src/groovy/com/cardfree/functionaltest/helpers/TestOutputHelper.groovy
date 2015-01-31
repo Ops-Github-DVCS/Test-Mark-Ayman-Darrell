@@ -17,4 +17,8 @@ class TestOutputHelper {
     static def printRestCall(def outputString){
         println(getPrintRestCallSpacer() + outputString)
     }
+
+    static def printRestCallIndent(def outputString){
+        printRestCall(getPrintRestCallSpacer() + outputString)
+    }
 }
