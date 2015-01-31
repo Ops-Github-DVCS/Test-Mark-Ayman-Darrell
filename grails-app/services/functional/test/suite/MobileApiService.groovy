@@ -12,7 +12,6 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 
-@Transactional
 class MobileApiService {
     static def config = Holders.config
 
@@ -23,10 +22,41 @@ class MobileApiService {
         method.setEntity(entity)
     }
 
-    def oauthCall(jsonObj) {
-        def oAuthResult = executeMapiRestRequest("post", "oauth", config.common.oauth.url, jsonObj)
-
+    def getNonRegisteredOauthToken() {
+        def data = [
+                grantType: "client_credentials",
+                client   : [
+                        id: getOAuthId(),
+                        secret: getOAuthSecret()
+                ]
+        ]
+        def oAuthResult = executeMapiRestRequest("post", "oauth", getOAuthEndpoint(), data)
+        if(!oAuthResult?.text?.isEmpty()){
+            return oAuthResult.text
+        }
+        throw Exception("Could not provision non registered oAuth Token with id: ${getOAuthId()} and secret: ${getOAuthSecret()} for endpoint ${getOAuthEndpoint()}/oauth")
     }
+
+    def getOAuthEndpoint(){
+        def merchant = getTestMerchant()
+        config.oauth.url."$merchant"
+    }
+
+    def getOAuthId(){
+        def merchant = getTestMerchant()
+        config.oauth.id."$merchant"
+    }
+
+    def getOAuthSecret(){
+        def merchant = getTestMerchant()
+        config.oauth.secret."$merchant"
+    }
+
+    def getTestMerchant(){
+        System.getenv().merchant
+    }
+
+
 
     def executeMapiRestRequest(String operation, path, root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
         def client = HttpClients.createDefault()
