@@ -135,7 +135,9 @@ class MobileApiService {
             def responseContentType = responseHeaders ? responseHeaders."Content-Type" : ""
             TestOutputHelper.printRestCall("Response: ")
             TestOutputHelper.printRestCallIndent(status)
-            TestOutputHelper.printRestCallIndent(responseString ? JSON.parse(responseString) : "")
+            if(!responseString?.isEmpty()){
+                TestOutputHelper.printRestCallIndent(responseString && responseString?.contains("{") ? JSON.parse(responseString) : responseString)
+            }
             return [
                     status: status,
                     text: responseString,
