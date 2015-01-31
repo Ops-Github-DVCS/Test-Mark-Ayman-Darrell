@@ -1,7 +1,8 @@
 import functional.test.suite.MobileApiService
+import grails.util.Environment
 import spock.lang.Specification
 
-class HelloSpec extends Specification {
+class TestConfigurationSpec extends Specification {
 
     def mobileApiService = new MobileApiService()
 
@@ -22,7 +23,6 @@ class HelloSpec extends Specification {
 
         then:
         env.size() > 0
-        env.endpoint?.size() > 1
         env.merchant?.size() > 1
     }
 
@@ -34,11 +34,19 @@ class HelloSpec extends Specification {
         !testMerchant?.isEmpty()
     }
 
-    def "read test endpoint"(){
+    def "get oauth endpoint"(){
         when:
-        String testEndpoint = mobileApiService.getTestEndpoint()
+        def oauthEndpoint = mobileApiService.getOAuthEndpoint()
 
         then:
-        !testEndpoint?.isEmpty()
+        !oauthEndpoint.isEmpty()
+    }
+
+    def "get oAuth Token"(){
+        when:
+        def oAuthToken = mobileApiService.getNonRegisteredOauthToken()
+
+        then:
+        !oAuthToken.isEmpty()
     }
 }
