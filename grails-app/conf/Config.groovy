@@ -100,8 +100,8 @@ userInformation{
 }
 
 testExecution {
-    merchant = "dunkin"
-    endpoint = "test_uat"
+    merchant = "tacobell"
+    endpoint = "test_local"
 }
 
 testConfigurations{
