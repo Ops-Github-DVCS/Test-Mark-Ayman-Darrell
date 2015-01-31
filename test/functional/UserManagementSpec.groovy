@@ -10,6 +10,8 @@ class UserManagementSpec extends Specification{
         def userresult = accountManagementService.provisionNewRandomUser()
 
         then:
-        userresult != null
+        userresult?.status?.statusCode == 201
+        userresult?.json?.email?.contains("@")
+        !userresult?.json?.name?.isEmpty()
     }
 }
