@@ -89,7 +89,7 @@ class MobileApiService {
         executeMapiRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
-    def executeMapiRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], def contentType="application/json"){
+    def executeMapiRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], String contentType="application/json"){
         def client = HttpClients.createDefault()
 
         def pathWithQuery = {
