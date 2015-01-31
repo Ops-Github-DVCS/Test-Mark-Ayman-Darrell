@@ -1,6 +1,9 @@
+import functional.test.suite.MobileApiService
 import spock.lang.Specification
 
 class HelloSpec extends Specification {
+
+    def mobileApiService = new MobileApiService()
 
     def "spock configured"(){
         setup:
@@ -21,5 +24,21 @@ class HelloSpec extends Specification {
         env.size() > 0
         env.endpoint?.size() > 1
         env.merchant?.size() > 1
+    }
+
+    def "read test merchant"(){
+        when:
+        String testMerchant = mobileApiService.getTestMerchant()
+
+        then:
+        !testMerchant?.isEmpty()
+    }
+
+    def "read test endpoint"(){
+        when:
+        String testEndpoint = mobileApiService.getTestEndpoint()
+
+        then:
+        !testEndpoint?.isEmpty()
     }
 }
