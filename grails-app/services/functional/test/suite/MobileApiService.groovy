@@ -38,6 +38,27 @@ class MobileApiService {
         throw Exception("Could not provision non registered oAuth Token with id: ${getOAuthId()} and secret: ${getOAuthSecret()} for endpoint ${getOAuthEndpoint()}/oauth")
     }
 
+    def getRegisteredUserToken(userName, password){
+        TestOutputHelper.printServiceCall("Get registered user oAuth Token")
+        def unregisteredToken = getNonRegisteredOauthToken()
+        def data = [
+                grantType: "password_grant",
+                client   : [
+                        accessToken: unregisteredToken
+                ],
+                user     : [
+                        userName: userName,
+                        password: password
+                ]
+        ]
+        def oAuthResult = executeMapiRestRequest("post", "oauth", getOAuthEndpoint(), data)
+        if(!oAuthResult?.json?.accessToken?.isEmpty()){
+            return oAuthResult.json.accessToken
+        } else {
+            throw new Exception("Could not generate oAuth token for a user with these credentials.")
+        }
+    }
+
     def getConfigurationPath(String path1, String path2){
         return config.testConfigurations."$config.testExecution.endpoint"."$path1"."$path2"."$config.testExecution.merchant"
     }
@@ -56,6 +77,11 @@ class MobileApiService {
 
     def getOAuthSecret(){
         getConfigurationPath("oauth", "secret")
+    }
+
+    def executeMapiRegisteredUserRequest(def operation, def path, def data, def token){
+        def header = [Authorization: "bearer ${token}", Accept: "application/json"]
+        executeMapiRestRequest(operation, path, config.tacobell.root, data, header, "application/json")
     }
 
     def executeMapiUserCreationRequest(def userData){

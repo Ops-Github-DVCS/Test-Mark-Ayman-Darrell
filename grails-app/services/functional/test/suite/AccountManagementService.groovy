@@ -4,10 +4,9 @@ import com.cardfree.functionaltest.helpers.TestOutputHelper
 import grails.util.Holders
 
 
-class AccountManagementService {
+class AccountManagementService extends MobileApiService{
 
     static def config = Holders.config
-    def mobileApiService = new MobileApiService()
 
     private String fetchRandomUserNameAndEmail() {
         def randomEmailSupplement = UUID.randomUUID().toString()
@@ -26,7 +25,7 @@ class AccountManagementService {
         data.userName = userName
         data.email = userName
 
-        return mobileApiService.executeMapiUserCreationRequest(data)
+        return executeMapiUserCreationRequest(data)
     }
 
     private def getDefaultUserDetailInformation(){
