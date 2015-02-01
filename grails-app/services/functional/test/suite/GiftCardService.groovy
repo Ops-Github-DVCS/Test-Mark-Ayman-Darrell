@@ -37,8 +37,8 @@ class GiftCardService extends MobileApiService {
                 registrationRequestType: "RegisterExisting",
                 existingCard                : [
                         setAsUserDefaultGiftCard         : false,
-                        cardNumber            : "7777080056479441",
-                        pin : "82688235"
+                        cardNumber            : config.giftCardInformation.physicalCardNumber,
+                        pin : config.giftCardInformation.physicalCardNumber
                 ]
         ]
         executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)

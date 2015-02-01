@@ -113,8 +113,8 @@ orderInformation{
 }
 
 giftCardInformation{
-    physicalCardNumber = ""
-    physicalCardPin = ""
+    physicalCardNumber = "7777080056479441"
+    physicalCardPin = "82688235"
 }
 
 testConfigurations{
