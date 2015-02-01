@@ -113,8 +113,10 @@ orderInformation{
 }
 
 giftCardInformation{
-    physicalCardNumber = "7777080056479441"
-    physicalCardPin = "82688235"
+    physicalCardNumberVisa = "4293962000400068"
+    physicalCardPinVisa = "123"
+    physicalCardNumberFD = "7777080056479441"
+    physicalCardPinFD = "82688235"
 }
 
 testConfigurations{

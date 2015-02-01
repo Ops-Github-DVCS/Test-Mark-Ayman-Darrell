@@ -31,14 +31,14 @@ class GiftCardService extends MobileApiService {
         executeMapiRegisteredUserRequest("post", "gift-cards", data, token)
     }
 
-    def addPhysicalGiftCard(def token){
+    def addPhysicalGiftCard(def token, def cardNumber, def pin){
         TestOutputHelper.printServiceCall("Add Physical Gift Card")
         def dataAddPhysical = [
                 registrationRequestType: "RegisterExisting",
                 existingCard                : [
                         setAsUserDefaultGiftCard         : false,
-                        cardNumber            : config.giftCardInformation.physicalCardNumber,
-                        pin : config.giftCardInformation.physicalCardNumber
+                        cardNumber            : cardNumber,
+                        pin : pin
                 ]
         ]
         executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)
