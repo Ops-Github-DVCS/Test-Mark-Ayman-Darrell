@@ -88,7 +88,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         def transferResult = giftCardService.transferGiftCardBalance(userToken, addGCResult1.json.cardId, addGCResult2.json.cardId)
 
         then:
-        transferResult != null
+        GiftCardService.validateGiftCardBalanceTransferResult(transferResult)
     }
 
 }

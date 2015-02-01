@@ -45,6 +45,14 @@ class GiftCardService extends MobileApiService {
         executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)
     }
 
+    def transferGiftCardBalance(def token, def sourceGiftCardId, def desitnationGiftCardId){
+        TestOutputHelper.printServiceCall("Transfer Gift Card Balance")
+        def transferData = [
+                destinationCardId: desitnationGiftCardId
+        ]
+        executeMapiRegisteredUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
+    }
+
     def static validateNewGiftCardResult(addGCResult){
         assert addGCResult.status.statusCode == 201
         assert !addGCResult?.json?.cardId?.isEmpty()
@@ -52,5 +60,14 @@ class GiftCardService extends MobileApiService {
         //Make sure this is a FD card
         assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
         return true
+    }
+
+    def static validateGiftCardBalanceTransferResult(transferResult){
+        assert transferResult.status.statusCode == 200
+        assert transferResult.json.sourceCardBalance.startingBalance.amount == 5
+        assert transferResult.json.sourceCardBalance.endingBalance.amount == 0
+        assert transferResult.json.destinationCardBalance.endingBalance.amount == 15
+        assert transferResult.json.destinationCardBalance.startingBalance.amount == 10
+        true
     }
 }
