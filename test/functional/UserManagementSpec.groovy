@@ -1,9 +1,7 @@
+import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
-import spock.lang.Specification
 
-class UserManagementSpec extends Specification{
-
-    def accountManagementService = new AccountManagementService()
+class UserManagementSpec extends FunctionalSpecBase{
 
     def "random user creation"() {
         when:

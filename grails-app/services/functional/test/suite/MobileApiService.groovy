@@ -104,7 +104,7 @@ class MobileApiService {
         TestOutputHelper.printRestCall("Request:")
         TestOutputHelper.printRestCallIndent("${operation} -- ${fullPath}")
         if(jsonObj){
-            TestOutputHelper.printRestCallIndent(jsonObj as JSON)
+            TestOutputHelper.printRestCallIndent((jsonObj as JSON).toString())
         }
 
         def method = {

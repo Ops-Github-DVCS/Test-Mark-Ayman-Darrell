@@ -3,7 +3,6 @@ package functional.test.suite
 import com.cardfree.functionaltest.helpers.TestOutputHelper
 import grails.util.Holders
 
-
 class AccountManagementService extends MobileApiService{
 
     static def config = Holders.config

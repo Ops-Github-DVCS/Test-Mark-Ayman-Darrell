@@ -1,9 +1,7 @@
+import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.MobileApiService
-import spock.lang.Specification
 
-class TestConfigurationSpec extends Specification {
-
-    def mobileApiService = new MobileApiService()
+class TestConfigurationSpec extends FunctionalSpecBase{
 
     def "get oauth endpoint"(){
         when:
