@@ -1,5 +1,4 @@
 import com.cardfree.functionaltests.specbase.FunctionalSpecBase
-import functional.test.suite.MobileApiService
 
 class TestConfigurationSpec extends FunctionalSpecBase{
 
