@@ -41,6 +41,10 @@ class OrderManagementService extends MobileApiService{
     }
 
     def static validateSubmitOrderResponse(def submitOrderResponse){
+        assert submitOrderResponse.status.statusCode == 200
+        assert submitOrderResponse?.json?.total > 0.10
+        assert submitOrderResponse?.json?.orderState?.equals("SubmitOrderAsComplete")
+        assert submitOrderResponse?.json?.status?.equals("Success")
         true
     }
 }

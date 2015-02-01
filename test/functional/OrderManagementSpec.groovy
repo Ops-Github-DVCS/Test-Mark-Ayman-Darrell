@@ -42,7 +42,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         savedGCCheckoutData != null
-        submitOrderResult != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
 }
