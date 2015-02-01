@@ -36,6 +36,7 @@ class GiftCardService extends MobileApiService {
         def dataAddPhysical = [
                 registrationRequestType: "RegisterExisting",
                 existingCard                : [
+                        userConfirmedConversionOfLegacyCard : true,
                         setAsUserDefaultGiftCard         : false,
                         cardNumber            : cardNumber,
                         pin : pin
