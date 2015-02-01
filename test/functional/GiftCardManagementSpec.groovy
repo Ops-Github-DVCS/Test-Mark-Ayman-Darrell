@@ -54,6 +54,31 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         GiftCardService.validateNewGiftCardResult(addVisaGCResult)
     }
 
+    def "Add physical First Data Gift Card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        String userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add Physical Visa Gift Card to Account
+        when:
+        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberFD,
+                config.giftCardInformation.physicalCardPinFD)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addVisaGCResult)
+    }
+
+    @Ignore
     def "Transfer Balance from First Data Gift Card to First Data Gift Card"(){
         //Create New User
         when:
