@@ -2,6 +2,7 @@ package com.cardfree.functionaltests.specbase
 
 import functional.test.suite.AccountManagementService
 import functional.test.suite.GiftCardService
+import functional.test.suite.GiftingService
 import functional.test.suite.MobileApiService
 import functional.test.suite.OrderManagementService
 import grails.util.Holders
@@ -14,4 +15,5 @@ class FunctionalSpecBase extends Specification{
     def accountManagementService = new AccountManagementService()
     def giftCardService = new GiftCardService()
     def orderManagementService = new OrderManagementService()
+    def giftingService = new GiftingService()
 }
