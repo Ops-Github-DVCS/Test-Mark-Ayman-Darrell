@@ -1,5 +1,7 @@
 package functional.test.suite
 
+import com.cardfree.functionaltest.helpers.TestOutputHelper
+
 class GiftCardService extends MobileApiService {
     def creditCardService = new CreditCardService()
 
@@ -25,6 +27,7 @@ class GiftCardService extends MobileApiService {
     }
 
     def provisionGiftCard(def data, def token){
+        TestOutputHelper.printServiceCall("Provision Gift Card")
         executeMapiRegisteredUserRequest("post", "gift-cards", data, token)
     }
 

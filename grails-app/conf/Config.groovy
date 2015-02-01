@@ -68,7 +68,6 @@ grails {
     }
 }
 
-
 grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
@@ -106,6 +105,11 @@ userInformation{
     operatingSystem = "iOS"
     operatingSystemVersion = "6.0"
     currencyCode = "USD"
+}
+
+orderInformation{
+    storeNumber = "E720329"
+    plu = "1003"
 }
 
 testConfigurations{
