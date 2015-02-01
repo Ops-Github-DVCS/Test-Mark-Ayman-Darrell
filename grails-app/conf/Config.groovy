@@ -102,6 +102,7 @@ userInformation{
 testExecution {
     merchant = "tacobell"
     endpoint = "test_local"
+    prettyPrintJSON = false
 }
 
 testConfigurations{

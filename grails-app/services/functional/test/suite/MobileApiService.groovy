@@ -104,7 +104,7 @@ class MobileApiService {
         TestOutputHelper.printRestCall("Request:")
         TestOutputHelper.printRestCallIndent("[${operation.toUpperCase()}] -- ${fullPath}")
         if(jsonObj){
-            TestOutputHelper.printRestCallIndent((jsonObj as JSON).toString())
+            TestOutputHelper.printRestCallIndent((jsonObj as JSON).toString(config.testExecution.prettyPrintJSON))
         }
 
         def method = {
@@ -136,7 +136,7 @@ class MobileApiService {
             TestOutputHelper.printRestCall("Response: ")
             TestOutputHelper.printRestCallIndent(status)
             if(!responseString?.isEmpty()){
-                TestOutputHelper.printRestCallIndent(responseString && responseString?.contains("{") ? JSON.parse(responseString) : responseString)
+                TestOutputHelper.printRestCallIndent(responseString && responseString?.contains("{") ? (JSON.parse(responseString) as JSON).toString(config.testExecution.prettyPrintJSON) : responseString)
             }
             return [
                     status: status,
