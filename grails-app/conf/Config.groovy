@@ -1,3 +1,12 @@
+testExecution {
+    merchant = "tacobell"
+    endpoint = "test_local"
+    prettyPrintJSON = false
+}
+
+
+
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -97,12 +106,6 @@ userInformation{
     operatingSystem = "iOS"
     operatingSystemVersion = "6.0"
     currencyCode = "USD"
-}
-
-testExecution {
-    merchant = "tacobell"
-    endpoint = "test_local"
-    prettyPrintJSON = false
 }
 
 testConfigurations{
