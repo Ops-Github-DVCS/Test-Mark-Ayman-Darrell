@@ -112,6 +112,11 @@ orderInformation{
     plu = "1003"
 }
 
+giftCardInformation{
+    physicalCardNumber = ""
+    physicalCardPin = ""
+}
+
 testConfigurations{
     test_local {
         oauth {

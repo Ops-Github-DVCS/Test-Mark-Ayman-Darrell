@@ -31,6 +31,19 @@ class GiftCardService extends MobileApiService {
         executeMapiRegisteredUserRequest("post", "gift-cards", data, token)
     }
 
+    def addPhysicalGiftCard(def token){
+        TestOutputHelper.printServiceCall("Add Physical Gift Card")
+        def dataAddPhysical = [
+                registrationRequestType: "RegisterExisting",
+                existingCard                : [
+                        setAsUserDefaultGiftCard         : false,
+                        cardNumber            : "7777080056479441",
+                        pin : "82688235"
+                ]
+        ]
+        executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)
+    }
+
     def static validateNewGiftCardResult(addGCResult){
         assert addGCResult.status.statusCode == 201
         assert !addGCResult?.json?.cardId?.isEmpty()
