@@ -50,7 +50,7 @@ class GiftCardService extends MobileApiService {
         assert !addGCResult?.json?.cardId?.isEmpty()
         assert !addGCResult?.json?.cardNumber?.isEmpty()
         //Make sure this is a FD card
-        assert !addGCResult?.json?.cardNumber?.toString().startsWith("77")
+        assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
         return true
     }
 }
