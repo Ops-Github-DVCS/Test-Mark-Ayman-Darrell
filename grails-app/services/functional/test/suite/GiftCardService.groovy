@@ -45,10 +45,10 @@ class GiftCardService extends MobileApiService {
         executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)
     }
 
-    def transferGiftCardBalance(def token, def sourceGiftCardId, def desitnationGiftCardId){
+    def transferGiftCardBalance(def token, def sourceGiftCardId, def destinationGiftCardId){
         TestOutputHelper.printServiceCall("Transfer Gift Card Balance")
         def transferData = [
-                destinationCardId: desitnationGiftCardId
+                destinationCardId: destinationGiftCardId
         ]
         executeMapiRegisteredUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
     }
