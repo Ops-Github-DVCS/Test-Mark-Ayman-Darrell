@@ -10,7 +10,7 @@ class OrderManagementService extends MobileApiService{
                 restaurantId: config.orderInformation.storeNumber,
                 storeNumber : "9",
                 orderItem   : [
-                        plu            : config.orderInformation.storeNumber,
+                        plu            : config.orderInformation.plu,
                         quantity       : 1,
                         modifierOptions: []
                 ]
@@ -31,5 +31,16 @@ class OrderManagementService extends MobileApiService{
                 giftCardId : giftCardId
         ]
         return checkoutData
+    }
+
+    def static validateCreateOrderResponse(def createOrderResponse){
+        assert createOrderResponse.status.statusCode == 201
+        assert !createOrderResponse?.json?.total > 0.10
+        assert !createOrderResponse?.json?.orderId?.isEmpty()
+        true
+    }
+
+    def static validateSubmitOrderResponse(def submitOrderResponse){
+        true
     }
 }

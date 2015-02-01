@@ -2,6 +2,7 @@ import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
 import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
+import functional.test.suite.OrderManagementService
 
 class OrderManagementSpec extends FunctionalSpecBase{
 
@@ -32,12 +33,12 @@ class OrderManagementSpec extends FunctionalSpecBase{
         def createOrderResult = orderManagementService.createOrder(userToken)
 
         then:
-        createOrderResult != null
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
 
         //Submit Order
         when:
-        def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(createOrderResult.json.cardId)
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult.json.orderId, savedGCCheckoutData)
+        def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
+        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
