@@ -35,7 +35,7 @@ class OrderManagementService extends MobileApiService{
 
     def static validateCreateOrderResponse(def createOrderResponse){
         assert createOrderResponse.status.statusCode == 201
-        assert !createOrderResponse?.json?.total > 0.10
+        assert createOrderResponse?.json?.total > 0.10
         assert !createOrderResponse?.json?.orderId?.isEmpty()
         true
     }
