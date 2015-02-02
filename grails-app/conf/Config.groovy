@@ -177,19 +177,19 @@ testConfigurations{
                 tacobell = "03d91f77-973e-4d11-a3cb-ef860e12994e"
                 checkers = "D9556C1DDA0D11E3BF4B005056B046D7"
             }
-            api {
-                address {
-                    defaultVal = "http://dev01-app.cardfree.net"
-                    tacobell = "http://dev01-app.cardfree.net/"
-                }
-                account_management_application {
-                    defaultVal = "account-management/v1/"
-                    tacobell = "account-management/v1/"
-                }
-                order_management_application {
-                    defaultVal = "order-management/v1/"
-                    tacobell = "order-management/v1/"
-                }
+        }
+        api {
+            address {
+                defaultVal = "http://dev01-app.cardfree.net"
+                tacobell = "http://dev01-app.cardfree.net/"
+            }
+            account_management_application {
+                defaultVal = "account-management/v1/"
+                tacobell = "account-management/v1/"
+            }
+            order_management_application {
+                defaultVal = "order-management/v1/"
+                tacobell = "order-management/v1/"
             }
         }
         svc {
