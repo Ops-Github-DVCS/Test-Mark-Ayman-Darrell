@@ -3,9 +3,11 @@ import functional.test.suite.AccountManagementService
 import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
 import functional.test.suite.OrderManagementService
+import spock.lang.Ignore
 
 class OrderManagementSpec extends FunctionalSpecBase{
 
+    @Ignore
     def "Submit order with saved Gift Card"(){
         //Create New User
         when:
@@ -42,6 +44,38 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         savedGCCheckoutData != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+    }
+
+    def "Submit order with saved Credit Card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 

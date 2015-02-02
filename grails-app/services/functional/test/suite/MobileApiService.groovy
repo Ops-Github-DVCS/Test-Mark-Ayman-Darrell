@@ -103,6 +103,7 @@ class MobileApiService {
         def fullPath = root + pathWithQuery
         TestOutputHelper.printRestCall("Request:")
         TestOutputHelper.printRestCallIndent("[${operation.toUpperCase()}] -- ${fullPath}")
+
         if(jsonObj){
             TestOutputHelper.printRestCallIndent((jsonObj as JSON).toString(config.testExecution.prettyPrintJSON))
         }

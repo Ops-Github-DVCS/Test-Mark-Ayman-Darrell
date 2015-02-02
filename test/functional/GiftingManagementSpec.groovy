@@ -1,5 +1,6 @@
 import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
+import functional.test.suite.GiftingService
 
 class GiftingManagementSpec extends FunctionalSpecBase{
     def "send egift to email user"() {
@@ -23,6 +24,6 @@ class GiftingManagementSpec extends FunctionalSpecBase{
         def sentGiftResult = giftingService.sendEGift(userToken, checkoutDetails, "jim@jimberry.net")
 
         then:
-        sentGiftResult != null
+        GiftingService.validateEGiftSendResult(sentGiftResult)
     }
 }

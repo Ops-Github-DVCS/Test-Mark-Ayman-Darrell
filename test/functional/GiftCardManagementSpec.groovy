@@ -6,7 +6,6 @@ import spock.lang.Ignore
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
-    @Ignore
     def "Provision gift card with new credit card"(){
         //Create New User
         when:
@@ -54,6 +53,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         GiftCardService.validateNewGiftCardResult(addVisaGCResult)
     }
 
+    @Ignore
     def "Add physical First Data Gift Card"(){
         //Create New User
         when:
