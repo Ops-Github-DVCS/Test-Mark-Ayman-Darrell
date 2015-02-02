@@ -31,7 +31,7 @@ class CreditCardService extends MobileApiService{
                 paymentType           : "NewCreditCard",
                 postalCode            : "02169",
                 nameOnCard            : "test test",
-                cvv                   : "111",
+                cvv                   : "444",
                 cardNumber            : "4111111111111111",
                 expiration            : [
                         month: 12,

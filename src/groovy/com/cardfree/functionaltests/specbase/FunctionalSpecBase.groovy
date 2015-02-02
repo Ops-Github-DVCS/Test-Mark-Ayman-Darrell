@@ -1,6 +1,7 @@
 package com.cardfree.functionaltests.specbase
 
 import functional.test.suite.AccountManagementService
+import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
 import functional.test.suite.GiftingService
 import functional.test.suite.MobileApiService
@@ -16,4 +17,5 @@ class FunctionalSpecBase extends Specification{
     def giftCardService = new GiftCardService()
     def orderManagementService = new OrderManagementService()
     def giftingService = new GiftingService()
+    def creditCardService = new CreditCardService()
 }
