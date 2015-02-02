@@ -1,6 +1,6 @@
 testExecution {
     merchant = "tacobell"
-    endpoint = "test_local"
+    endpoint = "test_dev"
     prettyPrintJSON = false
 }
 
@@ -190,6 +190,20 @@ testConfigurations{
             order_management_application {
                 defaultVal = "order-management/v1/"
                 tacobell = "order-management/v1/"
+            }
+        }
+        api {
+            address {
+                defaultVal = "https://dev01-app.cardfree.net/"
+                tacobell = "https://dev01-app.cardfree.net/"
+            }
+            account_management_application {
+                defaultVal = "account-management/v1/"
+                tacobell = "account-management/v1/"
+            }
+            order_management_application {
+                defaultVal = "vsvm_om/"
+                tacobell = "vsvm_om/"
             }
         }
         svc {
