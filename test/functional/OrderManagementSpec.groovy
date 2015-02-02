@@ -47,7 +47,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
-    def "Submit order with saved Credit Card"(){
+    def "Submit order with new Credit Card"(){
         //Create New User
         when:
         def userResult = accountManagementService.provisionNewRandomUser()
