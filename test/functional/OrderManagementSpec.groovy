@@ -7,7 +7,6 @@ import spock.lang.Ignore
 
 class OrderManagementSpec extends FunctionalSpecBase{
 
-    @Ignore
     def "Submit order with saved Gift Card"(){
         //Create New User
         when:
@@ -25,7 +24,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         //Add GC to user using a new Visa CC
         when:
-        def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+        def addGCResult = giftCardService.provisionGiftCardWithNewCC(100.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
 
         then:
         GiftCardService.validateNewGiftCardResult(addGCResult)
@@ -47,6 +46,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
+    @Ignore
     def "Submit order with new Credit Card"(){
         //Create New User
         when:
