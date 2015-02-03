@@ -157,8 +157,8 @@ testConfigurations{
                 tacobell = "vsvm/"
             }
             order_management_application {
-                defaultVal = "vsvm_om/"
-                tacobell = "vsvm_om/"
+                defaultVal = "vsvm_order/"
+                tacobell = "vsvm_order/"
             }
         }
     }
