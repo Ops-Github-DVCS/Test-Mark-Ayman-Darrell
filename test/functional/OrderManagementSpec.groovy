@@ -50,6 +50,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
     def "Submit GUEST order with new CC"(){
         //Setup Device Identifier
+        setup:
         def deviceIdentifier = GUIDGenerator.toString()
 
         //Create Order
