@@ -1,6 +1,6 @@
 testExecution {
     merchant = "tacobell"
-    endpoint = "test_dev"
+    endpoint = "test_local"
     prettyPrintJSON = false
 }
 
@@ -113,7 +113,7 @@ orderInformation{
 }
 
 giftCardInformation{
-    physicalCardNumberVisa = "4293962000470350"
+    physicalCardNumberVisa = "4293962000471408"
     physicalCardPinVisa = "123"
     physicalCardNumberFD = "7777080793467994"
     physicalCardPinFD = "82688235"
@@ -180,20 +180,6 @@ testConfigurations{
         }
         api {
             address {
-                defaultVal = "http://dev01-app.cardfree.net"
-                tacobell = "http://dev01-app.cardfree.net/"
-            }
-            account_management_application {
-                defaultVal = "account-management/v1/"
-                tacobell = "account-management/v1/"
-            }
-            order_management_application {
-                defaultVal = "order-management/v1/"
-                tacobell = "order-management/v1/"
-            }
-        }
-        api {
-            address {
                 defaultVal = "https://dev01-app.cardfree.net/"
                 tacobell = "https://dev01-app.cardfree.net/"
             }
@@ -202,8 +188,8 @@ testConfigurations{
                 tacobell = "account-management/v1/"
             }
             order_management_application {
-                defaultVal = "vsvm_om/"
-                tacobell = "vsvm_om/"
+                defaultVal = "order-management/v1/"
+                tacobell = "order-management/v1/"
             }
         }
         svc {

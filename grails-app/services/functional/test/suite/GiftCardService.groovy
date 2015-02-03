@@ -28,7 +28,7 @@ class GiftCardService extends MobileApiService {
 
     def provisionGiftCard(def data, def token){
         TestOutputHelper.printServiceCall("Provision Gift Card")
-        executeMapiRegisteredUserRequest("post", "gift-cards", data, token)
+        executeMapiUserRequest("post", "gift-cards", data, token)
     }
 
     def addPhysicalGiftCard(def token, def cardNumber, def pin){
@@ -42,7 +42,7 @@ class GiftCardService extends MobileApiService {
                         pin : pin
                 ]
         ]
-        executeMapiRegisteredUserRequest("post", "gift-cards", dataAddPhysical, token)
+        executeMapiUserRequest("post", "gift-cards", dataAddPhysical, token)
     }
 
     def transferGiftCardBalance(def token, def sourceGiftCardId, def destinationGiftCardId){
@@ -50,7 +50,7 @@ class GiftCardService extends MobileApiService {
         def transferData = [
                 destinationCardId: destinationGiftCardId
         ]
-        executeMapiRegisteredUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
+        executeMapiUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
     }
 
     def static validateNewGiftCardResult(addGCResult){

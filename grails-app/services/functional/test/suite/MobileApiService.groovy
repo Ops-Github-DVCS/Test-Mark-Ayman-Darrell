@@ -67,6 +67,10 @@ class MobileApiService {
         getConfigurationPath("api", "address") + getConfigurationPath("api", "account_management_application")
     }
 
+    def getOrderManagementRequestEndpoint(){
+        getConfigurationPath("api", "address") + getConfigurationPath("api", "order_management_application")
+    }
+
     def getOAuthEndpoint(){
         getConfigurationPath("oauth", "url")
     }
@@ -79,9 +83,16 @@ class MobileApiService {
         getConfigurationPath("oauth", "secret")
     }
 
-    def executeMapiRegisteredUserRequest(def operation, def path, def data, def token){
+    def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false){
+        if(!token){
+            token = getNonRegisteredOauthToken()
+        }
         def header = [Authorization: "bearer ${token}", Accept: "application/json"]
-        executeMapiRestRequest(operation, "users/me/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
+        if(guest){
+            executeMapiRestRequest(operation, "" + path, getOrderManagementRequestEndpoint(), data, header, "application/json")
+        } else {
+            executeMapiRestRequest(operation, "users/me/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
+        }
     }
 
     def executeMapiUserCreationRequest(def userData){

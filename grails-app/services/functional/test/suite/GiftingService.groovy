@@ -21,7 +21,7 @@ class GiftingService extends MobileApiService{
                 recipientEmailOrSmsNumber: recipientEmail
         ]
         data.provisionModel.checkoutDetails = checkoutDetails
-        executeMapiRegisteredUserRequest("post", "gifting", data, token)
+        executeMapiUserRequest("post", "gifting", data, token)
     }
 
     def static validateEGiftSendResult(def sentGiftResult){

@@ -7,6 +7,7 @@ import spock.lang.Ignore
 
 class OrderManagementSpec extends FunctionalSpecBase{
 
+    @Ignore
     def "Submit order with saved Gift Card"(){
         //Create New User
         when:
@@ -43,6 +44,26 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         savedGCCheckoutData != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+    }
+
+    def "Submit GUEST order with new CC"(){
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(null, true)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        creditCardCheckoutDetails.email = "jim@jimberry.net"
+        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true)
+
+        then:
+        creditCardCheckoutDetails != null
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 

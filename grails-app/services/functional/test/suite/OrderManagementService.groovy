@@ -4,7 +4,7 @@ import com.cardfree.functionaltest.helpers.TestOutputHelper
 
 class OrderManagementService extends MobileApiService{
 
-    def createOrder(def token) {
+    def createOrder(def token, def guest = false) {
         TestOutputHelper.printServiceCall("Create Order")
         def orderData = [
                 restaurantId: config.orderInformation.storeNumber,
@@ -15,13 +15,13 @@ class OrderManagementService extends MobileApiService{
                         modifierOptions: []
                 ]
         ]
-        def orderResult = executeMapiRegisteredUserRequest("post", "orders", orderData, token)
+        def orderResult = executeMapiUserRequest("post", "orders", orderData, token, guest)
         orderResult
     }
 
-    def submitOrder(def token, def orderId, def checkoutData){
+    def submitOrder(def token, def orderId, def checkoutData, def guest = false){
         TestOutputHelper.printServiceCall("Submit Order")
-        def checkoutResult = executeMapiRegisteredUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderId}/checkout", checkoutData, token)
+        def checkoutResult = executeMapiUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderId}/checkout", checkoutData, token, guest)
         checkoutResult
     }
 
