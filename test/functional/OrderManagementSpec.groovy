@@ -3,6 +3,7 @@ import functional.test.suite.AccountManagementService
 import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
 import functional.test.suite.OrderManagementService
+import org.hibernate.id.GUIDGenerator
 import spock.lang.Ignore
 
 class OrderManagementSpec extends FunctionalSpecBase{
@@ -48,10 +49,12 @@ class OrderManagementSpec extends FunctionalSpecBase{
     }
 
     def "Submit GUEST order with new CC"(){
+        //Setup Device Identifier
+        def deviceIdentifier = GUIDGenerator.toString()
 
         //Create Order
         when:
-        def createOrderResult = orderManagementService.createOrder(null, true)
+        def createOrderResult = orderManagementService.createOrder(null, true, deviceIdentifier)
 
         then:
         OrderManagementService.validateCreateOrderResponse(createOrderResult)
@@ -60,7 +63,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
         creditCardCheckoutDetails.email = "jim@jimberry.net"
-        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true, true)
+        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true, deviceIdentifier)
 
         then:
         creditCardCheckoutDetails != null

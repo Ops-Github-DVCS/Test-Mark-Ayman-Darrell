@@ -83,13 +83,13 @@ class MobileApiService {
         getConfigurationPath("oauth", "secret")
     }
 
-    def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false, def guest_submit = false){
+    def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false, def deviceIdentifier = null){
         if(!token){
             token = getNonRegisteredOauthToken()
         }
         def header = [Authorization: "bearer ${token}", Accept: "application/json"]
-        if(guest_submit){
-            header = [Authorization: "bearer ${token}", Accept: "application/json", "Content-Type": "application/json"]
+        if(guest && deviceIdentifier){
+            header = [Authorization: "bearer ${token}", Accept: "application/json", "Device-Identifier": deviceIdentifier]
         }
         if(guest){
             executeMapiRestRequest(operation, "" + path, getOrderManagementRequestEndpoint(), data, header, "application/json")
