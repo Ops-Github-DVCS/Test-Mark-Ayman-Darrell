@@ -19,9 +19,9 @@ class OrderManagementService extends MobileApiService{
         orderResult
     }
 
-    def submitOrder(def token, def orderId, def checkoutData, def guest = false){
+    def submitOrder(def token, def orderId, def checkoutData, def guest = false, def guestSubmit = false){
         TestOutputHelper.printServiceCall("Submit Order")
-        def checkoutResult = executeMapiUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderId}/checkout", checkoutData, token, guest)
+        def checkoutResult = executeMapiUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderId}/checkout", checkoutData, token, guest, guestSubmit)
         checkoutResult
     }
 

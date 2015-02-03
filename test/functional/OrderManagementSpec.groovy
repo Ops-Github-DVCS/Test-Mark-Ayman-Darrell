@@ -60,7 +60,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
         creditCardCheckoutDetails.email = "jim@jimberry.net"
-        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true)
+        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true, true)
 
         then:
         creditCardCheckoutDetails != null
