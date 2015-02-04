@@ -123,7 +123,6 @@ testConfigurations{
     test_local {
         oauth {
             url {
-                defaultVal = "https://dev01-app.cardfree.net/"
                 tacobell = "https://dev01-app.cardfree.net/"
                 checkers = "https://dev-mon-api01.cardfree.net/"
             }
@@ -149,15 +148,12 @@ testConfigurations{
         }
         api {
             address {
-                defaultVal = "http://192.168.82.128/"
                 tacobell = "http://192.168.82.128/"
             }
             account_management_application {
-                defaultVal = "vsvm/"
                 tacobell = "vsvm/"
             }
             order_management_application {
-                defaultVal = "vsvm_order/"
                 tacobell = "vsvm_order/"
             }
         }
@@ -165,7 +161,6 @@ testConfigurations{
     test_dev {
         oauth {
             url {
-                defaultVal = "https://dev01-app.cardfree.net/"
                 tacobell = "https://dev01-app.cardfree.net/"
                 checkers = "https://dev-mon-api01.cardfree.net/"
             }
@@ -180,15 +175,12 @@ testConfigurations{
         }
         api {
             address {
-                defaultVal = "https://dev01-app.cardfree.net/"
                 tacobell = "https://dev01-app.cardfree.net/"
             }
             account_management_application {
-                defaultVal = "account-management/v1/"
                 tacobell = "account-management/v1/"
             }
             order_management_application {
-                defaultVal = "order-management/v1/"
                 tacobell = "order-management/v1/"
             }
         }
@@ -207,14 +199,38 @@ testConfigurations{
     test_uat {
         oauth {
             url {
-                defaultVal = "https://uat-app.cardfree.net/"
-                tacobell = "https://uat-app.cardfree.net/"
+                tacobell = "https://uat01-app.cardfree.net/"
+                checkers = "https://dev-mon-api01.cardfree.net/"
             }
             id {
                 tacobell = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
+                checkers = "D93B5A92DA0D11E3BF4B005056B046D7"
             }
             secret {
-                tacobell = "03d91f77-973e-4d11-a3cb-ef860e12994e"
+                tacobell = "5e7abeda-27bb-49eb-b58e-edd456b4c477"
+                checkers = "D9556C1DDA0D11E3BF4B005056B046D7"
+            }
+        }
+        api {
+            address {
+                tacobell = "https://uat01-app.cardfree.net/"
+            }
+            account_management_application {
+                tacobell = "account-management/v1/"
+            }
+            order_management_application {
+                tacobell = "order-management/v1/"
+            }
+        }
+        svc {
+            url {
+                defaultVal = "http://dev-cfr-app01.cardfree.net/CardfreeSVC/v1"
+            }
+            username {
+                defaultVal = "resttest"
+            }
+            password {
+                defaultVal = "0RAP%y@73qa4*IHD"
             }
         }
     }
