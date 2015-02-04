@@ -6,6 +6,30 @@ import spock.lang.Ignore
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
+    def "Check gift card balance"(){
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken("nelia.stasuk+3@gmail.com", "Korona0")
+
+        then:
+        !userToken.isEmpty()
+
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, "b5033382-73b5-46bc-a39c-af2b969a75c4")
+
+        then:
+        getBalanceResult != null
+
+        //Check Transaction History
+        when:
+        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, "b5033382-73b5-46bc-a39c-af2b969a75c4")
+
+        then:
+        transactionHistoryResult != null
+    }
+
     @Ignore
     def "Provision gift card with new credit card"(){
         //Create New User
@@ -28,8 +52,16 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         GiftCardService.validateNewGiftCardResult(addGCResult)
+
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult != null
     }
 
+    @Ignore
     def "Add physical Visa Gift Card"(){
         //Create New User
         when:

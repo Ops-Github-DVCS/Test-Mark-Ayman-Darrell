@@ -53,6 +53,16 @@ class GiftCardService extends MobileApiService {
         executeMapiUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
     }
 
+    def getGiftCardBalance(def token, def giftCardId){
+        TestOutputHelper.printServiceCall("Get Gift Card Balance")
+        executeMapiUserRequest("get", "gift-cards/${giftCardId}", null, token)
+    }
+
+    def getGiftCardTransactionHistory(def token, def giftCardId){
+        TestOutputHelper.printServiceCall("Get Gift Card Transaction History")
+        executeMapiUserRequest("get", "gift-cards/${giftCardId}/transactions", null, token)
+    }
+
     def static validateNewGiftCardResult(addGCResult){
         assert addGCResult.status.statusCode == 201
         assert !addGCResult?.json?.cardId?.isEmpty()
