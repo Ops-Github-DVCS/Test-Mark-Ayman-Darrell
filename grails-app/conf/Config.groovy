@@ -108,7 +108,8 @@ userInformation{
 }
 
 orderInformation{
-    storeNumber = "E720329"
+    //storeNumber = "E720329"
+    storeNumber = "027505"
     plu = "1003"
 }
 
@@ -161,6 +162,41 @@ testConfigurations{
             order_management_application {
                 tacobell = "vsvm_order/"
                 dunkin = "vsvm_order/"
+            }
+        }
+    }
+    test_local_uat {
+        oauth {
+            url {
+                tacobell = "https://uat01-app.cardfree.net/"
+            }
+            id {
+                tacobell = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
+            }
+            secret {
+                tacobell = "5e7abeda-27bb-49eb-b58e-edd456b4c477"
+            }
+        }
+        svc {
+            url {
+                defaultVal = "http://localhost:8080/CardfreeSVC/v1/"
+            }
+            username {
+                defaultVal = "resttest"
+            }
+            password {
+                defaultVal = "0RAP%y@73qa4*IHD"
+            }
+        }
+        api {
+            address {
+                tacobell = "http://192.168.82.128/"
+            }
+            account_management_application {
+                tacobell = "vsvm/"
+            }
+            order_management_application {
+                tacobell = "vsvm_order/"
             }
         }
     }
