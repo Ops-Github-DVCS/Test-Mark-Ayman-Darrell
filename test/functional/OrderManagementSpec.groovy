@@ -77,12 +77,27 @@ class OrderManagementSpec extends FunctionalSpecBase{
         then:
         !userToken.isEmpty()
 
+        //Add Credit Card to user
+        when:
+        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+
+        then:
+        CreditCardService.validateAddCreditCardResult(addCreditCardResult)
+        addCreditCardResult != null
+
         //Add GC to user using a new Visa CC
         when:
-        def addGCResult = giftCardService.provisionGiftCardWithNewCC(10.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+        def addGCResult = giftCardService.provisionGiftCardWithSavedCC(10.00, false, userToken, addCreditCardResult?.json?.creditCardId)
 
         then:
         GiftCardService.validateNewGiftCardResult(addGCResult)
+
+        //Setup Auto Reload Settings
+        when:
+        def autoRealoadUpdateResult = giftCardService.setupAutoReloadSettings(userToken, addGCResult?.json?.cardId, addCreditCardResult?.json?.creditCardId)
+
+        then:
+        autoRealoadUpdateResult != null
 
         //Create Order
         when:
@@ -106,6 +121,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
+        getBalanceResult?.json?.availableBalance?.amount > 10
 
         //Check Transaction History
         when:
@@ -139,6 +155,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
+    @Ignore
     def "Submit order with new Credit Card"(){
         //Create New User
         when:

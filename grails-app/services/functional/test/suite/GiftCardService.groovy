@@ -26,6 +26,39 @@ class GiftCardService extends MobileApiService {
         return provisionGiftCard(data, token)
     }
 
+    def provisionGiftCardWithSavedCC(Double amount, Boolean defaultCard, token, savedCreditCardToken, def inputPassword = config.userInformation.password){
+        def data = [
+                registrationRequestType: "ProvisionWithFunds",
+                newCard                : [
+                        setAsUserDefaultGiftCard         : defaultCard,
+                        loadAmount                       : [
+                                amount      : amount,
+                                currencyCode: config.userInformation.currencyCode
+                        ],
+                        cardDesignId                     : 3,
+                        customSuppliedUserDesign         : true,
+                        customSuppliedUserDesignImageName: "test-me-image",
+                ],
+                password: inputPassword
+        ]
+        data.newCard.checkoutDetails = [
+                paymentType: "SavedCreditCard",
+                token: savedCreditCardToken
+        ]
+        return provisionGiftCard(data, token)
+    }
+
+    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId){
+        def autoReloadData = [
+            enabled:true,
+            thresholdTriggerAmount:10,
+            reloadAmount:20,
+            paymentTypeCode:"CC",
+            paymentCreditCardId:creditCardId
+        ]
+        executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token)
+    }
+
     def provisionGiftCard(def data, def token){
         TestOutputHelper.printServiceCall("Provision Gift Card")
         executeMapiUserRequest("post", "gift-cards", data, token)

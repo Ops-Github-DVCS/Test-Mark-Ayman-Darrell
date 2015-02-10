@@ -26,6 +26,12 @@ class CreditCardService extends MobileApiService{
         data
     }
 
+    def addCreditCardToAccount(def token){
+        def addCreditCardData = getVisaTestCard()
+
+        executeMapiUserRequest("post", "credit-cards", addCreditCardData, token)
+    }
+
     def getVisaCheckoutDetails(){
         return [
                 paymentType           : "NewCreditCard",
@@ -63,5 +69,12 @@ class CreditCardService extends MobileApiService{
             default:
                 return getVisaTestCard()
         }
+    }
+
+    def static validateAddCreditCardResult(def addCreditCardResult){
+        assert addCreditCardResult?.status.statusCode == 201
+        assert !addCreditCardResult?.json?.creditCardId?.isEmpty()
+        assert !addCreditCardResult?.json?.nameOnCard?.isEmpty()
+        return true
     }
 }

@@ -108,16 +108,16 @@ userInformation{
 }
 
 orderInformation{
-    //storeNumber = "E720329"
-    storeNumber = "027505"
+    storeNumber = "E720329"
+    //storeNumber = "027505"
     plu = "1003"
 }
 
 giftCardInformation{
     physicalCardNumberVisa = "4293962000471408"
     physicalCardPinVisa = "123"
-    physicalCardNumberFD = "7777080793467994"
-    physicalCardPinFD = "82688235"
+    physicalCardNumberFD = "7777084573583660"
+    physicalCardPinFD = "42303721"
 }
 
 testConfigurations{
