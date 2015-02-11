@@ -11,21 +11,21 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
     def "Get Gift Card Transactions"(){
         //Login User
         when:
-        def userToken = accountManagementService.getRegisteredUserToken("johnnyfutahb8bcabe0555@gmail.com", "Password1")
+        def userToken = accountManagementService.getRegisteredUserToken("johnnyfutah_mobile_2_11@gmail.com", "Password1")
 
         then:
         !userToken.isEmpty()
 
         //Update Card Balance
         when:
-        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, "2000000013")
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, "200000238")
 
         then:
         getBalanceResult != null
 
         //Check Transaction History
         when:
-        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, "2000000013")
+        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, "200000238")
 
         then:
         transactionHistoryResult != null
@@ -113,6 +113,24 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
     }
 
     @Ignore
+    def "Reload GC that was purchased down to zero"(){
+
+        //Login User
+        when:
+        String userToken = accountManagementService.getRegisteredUserToken("johnnyfutah_mobile_2_11@gmail.com", config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Load Value on GC
+        when:
+        def loadValuleresult = giftCardService.loadValueOnExistingGiftCard(userToken)
+
+        then:
+        loadValuleresult != null
+    }
+
+    @Ignore
     def "Add physical First Data Gift Card"(){
         //Create New User
         when:
@@ -176,7 +194,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
     }
 
     @Ignore
-    def "Get multiple gift carfds from user"(){
+    def "Get multiple gift cards from user"(){
         //Create New User
         when:
         def userResult = accountManagementService.provisionNewRandomUser()
@@ -388,7 +406,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
-        getBalanceResult?.json?.availableBalance?.amount > == 25
+        getBalanceResult?.json?.availableBalance?.amount == 25
     }
 
     def "Transfer Balance from FD to Visa GC and test auto reload without order"(){
@@ -462,6 +480,6 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
-        getBalanceResult?.json?.availableBalance?.amount > == 25
+        getBalanceResult?.json?.availableBalance?.amount == 25
     }
 }
