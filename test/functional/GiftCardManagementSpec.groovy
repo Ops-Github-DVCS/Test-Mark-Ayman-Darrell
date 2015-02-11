@@ -281,6 +281,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Create Order
         when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
         def createOrderResult = orderManagementService.createOrder(userToken)
 
         then:
@@ -298,6 +299,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Update Card Balance
         when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
         def getBalanceResult = giftCardService.getGiftCardBalance(userToken, getGiftCards?.json?.data[0].cardId)
 
         then:

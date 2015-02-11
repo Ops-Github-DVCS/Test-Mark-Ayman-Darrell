@@ -62,7 +62,6 @@ class OrderManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
-    @Ignore
     def "Submit order with saved Gift Card to trigger auto reload"(){
         //Create New User
         when:
