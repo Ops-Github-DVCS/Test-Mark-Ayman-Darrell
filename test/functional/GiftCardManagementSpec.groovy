@@ -6,6 +6,7 @@ import spock.lang.Ignore
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
+    @Ignore
     def "add guest GC"(){
 
     }
@@ -49,6 +50,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
+        getBalanceResult.status.statusCode == 200
 
         //Check Transaction History
         when:
@@ -86,6 +88,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
+        getBalanceResult.status.statusCode == 200
     }
 
     @Ignore
@@ -112,6 +115,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         GiftCardService.validateNewGiftCardResult(addVisaGCResult)
     }
 
+    @Ignore
     def "Add physical First Data Gift Card"(){
         //Create New User
         when:

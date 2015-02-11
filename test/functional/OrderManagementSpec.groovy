@@ -62,6 +62,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
+    @Ignore
     def "Submit order with saved Gift Card to trigger auto reload"(){
         //Create New User
         when:
@@ -181,6 +182,47 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Check Transaction History
+        when:
+        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, "b5033382-73b5-46bc-a39c-af2b969a75c4")
+
+        then:
+        transactionHistoryResult != null
+
+    }
+
+    def "Submit order with Bad Credit Card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        creditCardCheckoutDetails.cardNumber = "6011000259505851"
         def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
 
         then:
