@@ -7,11 +7,6 @@ import spock.lang.Ignore
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
     @Ignore
-    def "add guest GC"(){
-
-    }
-
-    @Ignore
     def "Get Gift Card Transactions"(){
         //Login User
         when:
@@ -60,6 +55,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
+    @Ignore
     def "Provision gift card with new credit card"(){
         //Create New User
         when:
