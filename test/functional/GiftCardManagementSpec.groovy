@@ -387,6 +387,6 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         getBalanceResult != null
-        getBalanceResult?.json?.availableBalance?.amount > 10
+        getBalanceResult?.json?.availableBalance?.amount > == 25
     }
 }
