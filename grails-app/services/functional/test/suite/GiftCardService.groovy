@@ -48,11 +48,15 @@ class GiftCardService extends MobileApiService {
         return provisionGiftCard(data, token)
     }
 
-    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId){
+    def getAllGiftCardsForUser(def token){
+        executeMapiUserRequest("get", "gift-cards", null, token)
+    }
+
+    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20){
         def autoReloadData = [
             enabled:true,
-            thresholdTriggerAmount:10,
-            reloadAmount:20,
+            thresholdTriggerAmount:triggerAmount,
+            reloadAmount:reloadAmount,
             paymentTypeCode:"CC",
             paymentCreditCardId:creditCardId
         ]

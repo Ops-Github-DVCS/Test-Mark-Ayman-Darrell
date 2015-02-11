@@ -2,6 +2,7 @@ import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
 import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
+import functional.test.suite.OrderManagementService
 import spock.lang.Ignore
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
@@ -172,6 +173,144 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         GiftCardService.validateGiftCardBalanceTransferResult(transferResult)
+    }
+
+    @Ignore
+    def "Get multiple gift carfds from user"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add FD GC 1 to user using a new Visa CC
+        when:
+        def addGCResult1 = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult1)
+
+        //Add FD GC 2 to user using a new Visa CC
+        when:
+        def addGCResult2 = giftCardService.provisionGiftCardWithNewCC(10.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult2)
+
+        //Get all gift cards for user
+        when:
+        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+
+        then:
+        getGiftCards != null
+        getGiftCards?.json?.data?.size() > 1
+        !getGiftCards?.json?.data[0].cardId?.isEmpty()
+    }
+
+    def "Transfer Balance from Visa to FD GC and test auto reload"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add Credit Card to user
+        when:
+        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+
+        then:
+        CreditCardService.validateAddCreditCardResult(addCreditCardResult)
+        addCreditCardResult != null
+
+        //Add Physical Visa Gift Card to Account
+        when:
+        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberVisa,
+                config.giftCardInformation.physicalCardPinVisa)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addVisaGCResult)
+
+        //Add FD GC 1 to user using a new Visa CC
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def addGCResult1 = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult1)
+
+        //Transfer balance from GC 1 to GC 2
+        when:
+        def transferResult = giftCardService.transferGiftCardBalance(userToken, addVisaGCResult.json.cardId, addGCResult1.json.cardId)
+
+        then:
+        //GiftCardService.validateGiftCardBalanceTransferResult(transferResult)
+        transferResult != null
+
+        //Get all gift cards for user
+        when:
+        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+
+        then:
+        getGiftCards != null
+        getGiftCards?.json?.data?.size() == 1
+        !getGiftCards?.json?.data[0].cardId?.isEmpty()
+
+        //Setup Auto Reload Settings
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def autoRealoadUpdateResult = giftCardService.setupAutoReloadSettings(userToken, getGiftCards?.json?.data[0].cardId, addCreditCardResult?.json?.creditCardId, 20, 20)
+
+        then:
+        autoRealoadUpdateResult != null
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(getGiftCards?.json?.data[0].cardId)
+        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+
+        then:
+        savedGCCheckoutData != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, getGiftCards?.json?.data[0].cardId)
+
+        then:
+        getBalanceResult != null
+        getBalanceResult?.json?.availableBalance?.amount > 10
+
+        //Check Transaction History
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, getGiftCards?.json?.data[0].cardId)
+
+        then:
+        transactionHistoryResult != null
     }
 
 }
