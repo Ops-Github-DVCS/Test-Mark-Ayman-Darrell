@@ -49,7 +49,7 @@ class GiftCardService extends MobileApiService {
     }
 
     def getAllGiftCardsForUser(def token){
-        executeMapiUserRequest("get", "gift-cards", null, token)
+        executeMapiUserRequest("get", "gifting", null, token)
     }
 
     def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20){
@@ -88,6 +88,28 @@ class GiftCardService extends MobileApiService {
                 destinationCardId: destinationGiftCardId
         ]
         executeMapiUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
+    }
+
+    def loadValueOnExistingGiftCard(def token){
+        def loadValueData = [
+            loadAmount:[
+                amount:20,
+                currencyCode:"USD"
+            ],
+            checkoutDetails:[
+                paymentType:"NewCreditCard",
+                postalCode:"00000",
+                nameOnCard:"save while loading",
+                cvv:"444",
+                cardNumber:"4111111111111111",
+                expiration:[
+                    month:5,
+                    year:2016
+                ],
+                savePaymentInformation:false
+            ]
+        ]
+        executeMapiUserRequest("post", "gift-cards/200000381/transactions", loadValueData, token)
     }
 
     def getGiftCardBalance(def token, def giftCardId){

@@ -1,8 +1,11 @@
 import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
 import functional.test.suite.GiftingService
+import spock.lang.Ignore
 
 class GiftingManagementSpec extends FunctionalSpecBase{
+
+    @Ignore
     def "send egift to email user"() {
         //Create New User
         when:
@@ -25,5 +28,22 @@ class GiftingManagementSpec extends FunctionalSpecBase{
 
         then:
         GiftingService.validateEGiftSendResult(sentGiftResult)
+    }
+
+    def "retrieve sent eGifts for user"() {
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken("sumankr3999@gmail.com", "Cts-123456")
+
+        then:
+        !userToken.isEmpty()
+
+        //Get all gifts
+        when:
+        def getAllGiftsResult = giftCardService.getAllGiftCardsForUser(userToken)
+
+        then:
+        getAllGiftsResult?.json.sentGiftCards?.size() > 1
+
     }
 }

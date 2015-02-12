@@ -409,6 +409,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         getBalanceResult?.json?.availableBalance?.amount == 25
     }
 
+    @Ignore
     def "Transfer Balance from FD to Visa GC and test auto reload without order"(){
         //Create New User
         when:
@@ -481,5 +482,54 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         then:
         getBalanceResult != null
         getBalanceResult?.json?.availableBalance?.amount == 25
+    }
+
+    def "Transfer Balance from FD to Visa GC and test Visa GC removed from account"() {
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add Physical Visa Gift Card to Account $5
+        when:
+        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberVisa,
+                config.giftCardInformation.physicalCardPinVisa)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addVisaGCResult)
+
+        //Add FD GC 1 to user using a new Visa CC $20
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def addGCResult1 = giftCardService.provisionGiftCardWithNewCC(20.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult1)
+
+        //Transfer balance from GC 1 to GC 2 $25
+        when:
+        def transferResult = giftCardService.transferGiftCardBalance(userToken, addVisaGCResult.json.cardId, addGCResult1.json.cardId )
+
+        then:
+        //GiftCardService.validateGiftCardBalanceTransferResult(transferResult)
+        transferResult != null
+
+        //Get all gift cards for user
+        when:
+        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+
+        then:
+        getGiftCards != null
+        getGiftCards?.json?.data?.size() == 1
+        !getGiftCards?.json?.data[0].cardId?.isEmpty()
     }
 }

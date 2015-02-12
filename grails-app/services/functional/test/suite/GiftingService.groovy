@@ -24,6 +24,10 @@ class GiftingService extends MobileApiService{
         executeMapiUserRequest("post", "gifting", data, token)
     }
 
+    def getGiftsForUser(def token){
+        executeMapiUserRequest("get", "gifting", null, token)
+    }
+
     def static validateEGiftSendResult(def sentGiftResult){
         assert sentGiftResult.status.statusCode == 200
         assert sentGiftResult?.json?.gift?.status?.equals("Created")
