@@ -40,7 +40,7 @@ class GiftingManagementSpec extends FunctionalSpecBase{
 
         //Get all gifts
         when:
-        def getAllGiftsResult = giftCardService.getAllGiftCardsForUser(userToken)
+        def getAllGiftsResult = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getAllGiftsResult?.json.sentGiftCards?.size() > 1

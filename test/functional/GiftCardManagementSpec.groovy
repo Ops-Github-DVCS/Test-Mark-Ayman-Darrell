@@ -89,6 +89,45 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
     }
 
     @Ignore
+    def "Reload fails with bad credit card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add GC to user using a new Visa CC
+        when:
+        def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult)
+
+        //Reload Existing GC
+        when:
+        def loadValuleresult = giftCardService.loadValueOnExistingGiftCard(userToken, addGCResult?.json?.cardId)
+
+        then:
+        loadValuleresult != null
+
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult != null
+        getBalanceResult.status.statusCode == 200
+    }
+
+    @Ignore
     def "Add physical Visa Gift Card"(){
         //Create New User
         when:
@@ -110,6 +149,16 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         then:
         GiftCardService.validateNewGiftCardResult(addVisaGCResult)
+
+        //Get all gift cards for user
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
+
+        then:
+        getGiftCards != null
+        getGiftCards?.json?.data?.size() ==0
+        !getGiftCards?.json?.data[0].cardId?.isEmpty()
     }
 
     @Ignore
@@ -148,11 +197,58 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Add Physical Visa Gift Card to Account
         when:
-        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberFD,
+        def addFirstDataGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberFD,
                 config.giftCardInformation.physicalCardPinFD)
 
         then:
-        GiftCardService.validateNewGiftCardResult(addVisaGCResult)
+        GiftCardService.validateNewGiftCardResult(addFirstDataGCResult)
+
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addFirstDataGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult != null
+    }
+
+    def "Test Default GC Settings"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        String userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Add GC to user using a new Visa CC
+        when:
+        def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, true, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult)
+
+        //Add Physical Visa Gift Card to Account
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def addFirstDataGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberFD,
+                config.giftCardInformation.physicalCardPinFD)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addFirstDataGCResult)
+
+        //Update Card Balance
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addFirstDataGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult != null
     }
 
     @Ignore
@@ -225,7 +321,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Get all gift cards for user
         when:
-        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getGiftCards != null
@@ -283,7 +379,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Get all gift cards for user
         when:
-        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getGiftCards != null
@@ -384,7 +480,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Get all gift cards for user
         when:
-        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getGiftCards != null
@@ -459,7 +555,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Get all gift cards for user
         when:
-        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getGiftCards != null
@@ -484,6 +580,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         getBalanceResult?.json?.availableBalance?.amount == 25
     }
 
+    @Ignore
     def "Transfer Balance from FD to Visa GC and test Visa GC removed from account"() {
         //Create New User
         when:
@@ -525,7 +622,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Get all gift cards for user
         when:
-        def getGiftCards = giftCardService.getAllGiftCardsForUser(userToken)
+        def getGiftCards = giftCardService.getAllGiftingGiftCardsForUser(userToken)
 
         then:
         getGiftCards != null
