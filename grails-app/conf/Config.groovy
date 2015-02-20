@@ -174,13 +174,13 @@ testConfigurations{
         }
         verified_user {
             id {
-                sonic = "56114a0f-ba56-4975-a205-ddc586da3245"
+                sonic = "c6ab4622-eda6-449d-835d-b331214a07cb"
             }
             userName {
-                sonic = "svc.cardfree+verified@gmail.com"
+                sonic = "johnnyfutah+sonic_2_20_15@gmail.com"
             }
             email {
-                sonic = "svc.cardfree+verified@gmail.com"
+                sonic = "johnnyfutah+sonic_2_20_15@gmail.com"
             }
             password {
                 sonic = "Password1"
