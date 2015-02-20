@@ -172,6 +172,20 @@ testConfigurations{
                 dunkin = "vsvm_order/"
             }
         }
+        verified_user {
+            id {
+                sonic = "56114a0f-ba56-4975-a205-ddc586da3245"
+            }
+            userName {
+                sonic = "svc.cardfree+verified@gmail.com"
+            }
+            email {
+                sonic = "svc.cardfree+verified@gmail.com"
+            }
+            password {
+                sonic = "Password1"
+            }
+        }
     }
     test_local_uat {
         oauth {
