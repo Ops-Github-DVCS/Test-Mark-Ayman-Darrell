@@ -5,7 +5,6 @@ import spock.lang.Ignore
 
 class GiftingManagementSpec extends FunctionalSpecBase{
 
-    @Ignore
     def "send egift to email user"() {
         //Create New User
         when:
@@ -30,6 +29,7 @@ class GiftingManagementSpec extends FunctionalSpecBase{
         GiftingService.validateEGiftSendResult(sentGiftResult)
     }
 
+    @Ignore
     def "retrieve sent eGifts for user"() {
         //Login User
         when:

@@ -179,7 +179,6 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         loadValuleresult != null
     }
 
-    @Ignore
     def "Add physical First Data Gift Card"(){
         //Create New User
         when:
@@ -211,6 +210,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         getBalanceResult != null
     }
 
+    @Ignore
     def "Test Default GC Settings"(){
         //Create New User
         when:
