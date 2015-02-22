@@ -127,7 +127,7 @@ testConfigurations{
                 tacobell = "https://dev01-app.cardfree.net/"
                 dunkin = "https://dev-dun-api01.cardfree.net/"
                 checkers = "https://dev-mon-api01.cardfree.net/"
-                sonic = "https://dev01-app.cardfree.net/"
+                sonic = "https://dev-son-api01.cardfree.net/"
             }
             id {
                 tacobell = "e28833aa-64df-4541-bd16-67d80d55b558"

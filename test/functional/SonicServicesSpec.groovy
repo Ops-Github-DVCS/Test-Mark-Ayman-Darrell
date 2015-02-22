@@ -5,10 +5,10 @@ class SonicServicesSpec extends SonicFunctionalSpecBase {
     def "login verified sonic user"(){
         //Login User
         when:
-        def userToken = accountManagementService.getRegisteredUserToken(mobileApiService.getValidatedUserEmail(), mobileApiService.getValidatedUserPassword())
+        def userToken = mobileApiService.getRegisteredUserToken(mobileApiService.getValidatedUserEmail(), mobileApiService.getValidatedUserPassword())
 
         then:
-        !userToken.isEmpty()
+        !userToken?.isEmpty()
 
     }
 }
