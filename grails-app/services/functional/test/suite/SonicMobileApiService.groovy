@@ -42,5 +42,6 @@ class SonicMobileApiService extends MobileApiService{
         } else {
             throw new Exception("Could not generate oAuth token for a user with these credentials.")
         }
+        oAuthResult
     }
 }
