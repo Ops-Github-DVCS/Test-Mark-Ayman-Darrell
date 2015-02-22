@@ -1,5 +1,5 @@
 testExecution {
-    merchant = "tacobell"
+    merchant = "sonic"
     endpoint = "test_local"
     prettyPrintJSON = false
 }
