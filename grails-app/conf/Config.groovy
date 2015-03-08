@@ -229,21 +229,21 @@ testConfigurations{
                 dunkin = "https://dev-dun-api01.cardfree.net/"
                 checkers = "https://dev-mon-api01.cardfree.net/"
                 sonic = "https://dev-son-api01.cardfree.net/"
-
+                peets = "http://dev-pee-app01.cardfree.net/"
             }
             id {
                 tacobell = "e28833aa-64df-4541-bd16-67d80d55b558"
                 dunkin = "B95D6A3EA972448BBB15C23DD0D20C25"
                 checkers = "D93B5A92DA0D11E3BF4B005056B046D7"
                 sonic = "e28833aa-64df-4541-bd16-67d80d55b558"
-
+                peets = "D93B5A92DA0D11E3BF4B005056B046D7"
             }
             secret {
                 tacobell = "03d91f77-973e-4d11-a3cb-ef860e12994e"
                 dunkin = "670166E094F34196928A87E893B39FC1"
                 checkers = "D9556C1DDA0D11E3BF4B005056B046D7"
                 sonic = "03d91f77-973e-4d11-a3cb-ef860e12994e"
-
+                peets = "D9556C1DDA0D11E3BF4B005056B046D7"
             }
         }
         api {
@@ -252,12 +252,14 @@ testConfigurations{
                 dunkin = "https://dev-dun-api01.cardfree.net/"
                 sonic = "https://dev-son-api01.cardfree.net/"
                 checkers = "https://dev-mon-api01.cardfree.net/"
+                peets = "http://dev-pee-app01.cardfree.net/"
             }
             account_management_application {
                 tacobell = "account-management/v1/"
                 dunkin = "account-management/v1/"
                 sonic = "hedgehog/v1.1/"
                 checkers = "account-management/v1/"
+                peets = "account-management/v1/"
             }
             order_management_application {
                 tacobell = "order-management/v1/"
