@@ -31,7 +31,7 @@ class MobileApiService {
                         secret: getOAuthSecret()
                 ]
         ]
-        def oAuthResult = executeMapiRestRequest("post", "oauth", getOAuthEndpoint(), data)
+        def oAuthResult = executeRestRequest("post", "oauth", getOAuthEndpoint(), data)
         if(!oAuthResult?.text?.isEmpty()){
             return oAuthResult.text
         }
@@ -51,7 +51,7 @@ class MobileApiService {
                         password: password
                 ]
         ]
-        def oAuthResult = executeMapiRestRequest("post", "oauth", getOAuthEndpoint(), data)
+        def oAuthResult = executeRestRequest("post", "oauth", getOAuthEndpoint(), data)
         if(!oAuthResult?.json?.accessToken?.isEmpty()){
             return oAuthResult.json.accessToken
         } else {
@@ -60,7 +60,12 @@ class MobileApiService {
     }
 
     def getConfigurationPath(String path1, String path2){
-        return config.testConfigurations."$config.testExecution.endpoint"."$path1"."$path2"."$config.testExecution.merchant"
+        def merchantValue =  config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."${config.testExecution.merchant}"
+		if(!merchantValue.isEmpty())
+			return merchantValue
+
+		def defaultValue =  config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."defaultValue"
+			return defaultValue
     }
 
     def getAccountManagementRequestEndpoint(){
@@ -83,7 +88,13 @@ class MobileApiService {
         getConfigurationPath("oauth", "secret")
     }
 
-    def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false, def deviceIdentifier = null){
+	Map basicAuthHeader(String username, password) {
+		def base = "${username}:${password}"
+		def base64 = base.bytes.encodeBase64()
+		[Authorization: "Basic ${base64}"]
+	}
+
+	def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false, def deviceIdentifier = null){
         if(!token){
             token = getNonRegisteredOauthToken()
         }
@@ -92,18 +103,25 @@ class MobileApiService {
             header = [Authorization: "bearer ${token}", Accept: "application/json", "Device-Identifier": deviceIdentifier]
         }
         if(guest){
-            executeMapiRestRequest(operation, "" + path, getOrderManagementRequestEndpoint(), data, header, "application/json")
+            executeRestRequest(operation, "" + path, getOrderManagementRequestEndpoint(), data, header, "application/json")
         } else {
-            executeMapiRestRequest(operation, "users/me/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
+            executeRestRequest(operation, "users/me/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
         }
     }
 
     def executeMapiUserCreationRequest(def userData){
         def header = [Authorization: "bearer ${getNonRegisteredOauthToken()}", Accept: "application/json"]
-        executeMapiRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
+        executeRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
-    def executeMapiRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], String contentType="application/json"){
+	def executeSVCRequest(String operation, String path, def jsonObj=null) {
+		String username = getConfigurationPath("svc", "username")
+		String password = getConfigurationPath("svc", "password")
+		executeRestRequest(operation, path, getConfigurationPath("svc", "url"), jsonObj,
+				basicAuthHeader(username , password) )
+	}
+
+	def executeRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], String contentType="application/json"){
         def client = HttpClients.createDefault()
 
         def pathWithQuery = {
