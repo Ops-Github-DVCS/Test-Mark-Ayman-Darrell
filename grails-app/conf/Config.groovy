@@ -1,5 +1,5 @@
 testExecution {
-    merchant = "peets"
+    merchant = "checkers"
     endpoint = "test_dev"
     prettyPrintJSON = false
 }

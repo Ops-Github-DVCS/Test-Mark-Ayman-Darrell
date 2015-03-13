@@ -59,13 +59,13 @@ class MobileApiService {
         }
     }
 
-    def getConfigurationPath(String path1, String path2){
-        def merchantValue =  config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."${config.testExecution.merchant}"
-		if(!merchantValue.isEmpty())
-			return merchantValue
+    def getConfigurationPath(String path1, String path2) {
+        def merchantValue = config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."${config.testExecution.merchant}"
+        if (!merchantValue.isEmpty())
+            return merchantValue
 
-		def defaultValue =  config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."defaultValue"
-			return defaultValue
+        def defaultValue = config.testConfigurations."${config.testExecution.endpoint}"."$path1"."$path2"."defaultVal"
+        return defaultValue
     }
 
     def getAccountManagementRequestEndpoint(){
@@ -114,14 +114,15 @@ class MobileApiService {
         executeRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
-	def executeSVCRequest(String operation, String path, def jsonObj=null) {
-		String username = getConfigurationPath("svc", "username")
-		String password = getConfigurationPath("svc", "password")
-		executeRestRequest(operation, path, getConfigurationPath("svc", "url"), jsonObj,
-				basicAuthHeader(username , password) )
-	}
+    def executeSVCRequest(String operation, String path, def jsonObj = null) {
+        String username = getConfigurationPath("svc", "username")
+        String password = getConfigurationPath("svc", "password")
+        executeRestRequest(operation, path, getConfigurationPath("svc", "url"), jsonObj,
+                basicAuthHeader(username, password))
+    }
 
-	def executeRestRequest(String operation, String path, String root, def jsonObj=null, Map<String,String> headers=[:], String contentType="application/json"){
+    def executeRestRequest(String operation, String path, String root,
+                           def jsonObj = null, Map<String, String> headers = [:], String contentType = "application/json") {
         def client = HttpClients.createDefault()
 
         def pathWithQuery = {

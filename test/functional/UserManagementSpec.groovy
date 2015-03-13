@@ -12,16 +12,15 @@ class UserManagementSpec extends FunctionalSpecBase{
         AccountManagementService.validateNewUser(userResult)
     }
 
-	@IgnoreRest
-	def "Registration trigger awards loyalty points only once"() {
-		when:
-		def userResult = accountManagementService.provisionNewRandomUser()
-		def loyaltyPurses = accountManagementService.executeSVCRequest("get",
-				"centralAccounts/${userResult.json.masterAccountId}/loyaltyPurses/", null)
-		then:
-		AccountManagementService.validateNewUser(userResult)
-	}
-
+    def "Registration trigger awards loyalty points only once"() {
+        when:
+            def userResult = accountManagementService.provisionNewRandomUser()
+            def loyaltyPurses = accountManagementService.executeSVCRequest("get",
+                    "/centralAccounts/${userResult.json.masterAccountId}/loyaltyPurses/", null)
+        then:
+            AccountManagementService.validateNewUser(userResult)
+            loyaltyPurses.json.loyaltyPurse.lifetimePoints == 1
+    }
 
 
 }
