@@ -161,11 +161,13 @@ testConfigurations{
                 tacobell = "http://192.168.82.128/"
                 dunkin = "http://192.168.82.128/"
                 sonic = "http://192.168.82.128/"
+				checkers = "http://vm:63346"
             }
             account_management_application {
                 tacobell = "vsvm/"
                 dunkin = "vsvm/"
                 sonic = "vsvm_sonic/"
+				checkers = "account-management/v1/"
             }
             order_management_application {
                 tacobell = "vsvm_order/"
