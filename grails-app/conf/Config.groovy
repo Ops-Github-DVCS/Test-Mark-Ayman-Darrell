@@ -167,7 +167,7 @@ testConfigurations{
                 tacobell = "vsvm/"
                 dunkin = "vsvm/"
                 sonic = "vsvm_sonic/"
-				checkers = "account-management/v1/"
+				checkers = "vsvm"
             }
             order_management_application {
                 tacobell = "vsvm_order/"
@@ -286,7 +286,7 @@ testConfigurations{
         oauth {
             url {
                 tacobell = "https://uat01-app.cardfree.net/"
-                checkers = "https://dev-mon-api01.cardfree.net/"
+                checkers = "https://uat-che-api01.cardfree.net/"
             }
             id {
                 tacobell = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
@@ -300,9 +300,12 @@ testConfigurations{
         api {
             address {
                 tacobell = "https://uat01-app.cardfree.net/"
+				checkers = "https://uat-che-api01.cardfree.net/"
+
             }
             account_management_application {
                 tacobell = "account-management/v1/"
+				checkers = "account-management/v1/"
             }
             order_management_application {
                 tacobell = "order-management/v1/"

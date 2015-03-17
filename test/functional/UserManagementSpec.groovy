@@ -9,7 +9,14 @@ class UserManagementSpec extends FunctionalSpecBase{
         def userResult = accountManagementService.provisionNewRandomUser()
 
         then:
-        AccountManagementService.validateNewUser(userResult)
+		AccountManagementService.validateNewUser(userResult)
+
+		when: "Retrieve user"
+		def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+		def fetchUser = accountManagementService.getUser(userToken)
+
+		then:
+		fetchUser.json.data.zip
     }
 
     def "Registration trigger awards loyalty points only once"() {

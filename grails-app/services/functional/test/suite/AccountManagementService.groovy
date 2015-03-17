@@ -24,6 +24,12 @@ class AccountManagementService extends MobileApiService{
         return executeMapiUserCreationRequest(data)
     }
 
+	def getUser(String oAuthToken) {
+		def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+		executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
+	}
+
+
     private def getDefaultUserDetailInformation(){
         def data = [
                 firstName             : config.userInformation.firstName,
@@ -34,7 +40,9 @@ class AccountManagementService extends MobileApiService{
                         model                 : config.userInformation.model,
                         operatingSystem       : config.userInformation.operatingSystem,
                         operatingSystemVersion: config.userInformation.operatingSystemVersion
-                ]
+                ],
+				zip: '80202',
+				birthdayInfo: [month: 2, day: 15, year: 1753]
         ]
         return data
     }
