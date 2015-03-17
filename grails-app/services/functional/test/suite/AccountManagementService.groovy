@@ -24,6 +24,11 @@ class AccountManagementService extends MobileApiService{
         return executeMapiUserCreationRequest(data)
     }
 
+    def getUserInformation(def token) {
+        TestOutputHelper.printServiceCall("Get User Information")
+        return executeMapiUserRequest("get", "/", null, token)
+    }
+
 	def getUser(String oAuthToken) {
 		def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
 		executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
