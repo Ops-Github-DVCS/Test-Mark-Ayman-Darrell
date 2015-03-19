@@ -1,30 +1,31 @@
 package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
+import com.cardfree.sdk.client.OauthClient
 
-class SonicMobileApiService extends MobileApiService{
+class SonicMobileApiService extends OauthClient{
 
-    def getValidatedUserId(){
+    String getValidatedUserId(){
         getConfigurationPath("verified_user", "id")
     }
 
-    def getValidatedUserName(){
+    String getValidatedUserName(){
         getConfigurationPath("verified_user", "userName")
     }
 
-    def getValidatedUserEmail(){
+    String getValidatedUserEmail(){
         getConfigurationPath("verified_user", "email")
     }
 
-    def getValidatedUserPassword(){
+    String getValidatedUserPassword(){
         getConfigurationPath("verified_user", "password")
     }
 
-    def getSonicOAuthToken(){
+    String getSonicOAuthToken(){
         getConfigurationPath("oauth", "token")
     }
 
-    def getNonRegisteredOauthToken() {
+    String getNonRegisteredOauthToken() {
         getSonicOAuthToken()
     }
 

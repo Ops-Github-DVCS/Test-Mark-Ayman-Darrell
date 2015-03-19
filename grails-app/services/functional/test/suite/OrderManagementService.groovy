@@ -1,8 +1,9 @@
 package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
+import com.cardfree.sdk.client.Order
 
-class OrderManagementService extends MobileApiService{
+class OrderManagementService extends Order{
 
     def createOrder(def token, def guest = false, def deviceIdetifier = null) {
         TestOutputHelper.printServiceCall("Create Order")
@@ -19,11 +20,9 @@ class OrderManagementService extends MobileApiService{
         orderResult
     }
 
-    def submitOrder(def token, def orderId, def checkoutData, def guest = false, def deviceIdentifier = null){
-        TestOutputHelper.printServiceCall("Submit Order")
-        def checkoutResult = executeMapiUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderId}/checkout", checkoutData, token, guest, deviceIdentifier)
-        checkoutResult
-    }
+	def submitOrderToStore(String token, String orderId, def checkoutData, boolean guest = false, String deviceIdentifier = null){
+		submitOrder(token, config.orderInformation.storeNumber, orderId, checkoutData, guest, deviceIdentifier)
+	}
 
     def getSavedGiftCardCheckoutData(def giftCardId) {
         def checkoutData = [

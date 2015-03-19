@@ -347,7 +347,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Add Credit Card to user
         when:
-        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
 
         then:
         CreditCardService.validateAddCreditCardResult(addCreditCardResult)
@@ -406,7 +406,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         when:
         userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
         def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(getGiftCards?.json?.data[0].cardId)
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -448,7 +448,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Add Credit Card to user
         when:
-        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
 
         then:
         CreditCardService.validateAddCreditCardResult(addCreditCardResult)
@@ -523,7 +523,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Add Credit Card to user
         when:
-        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
 
         then:
         CreditCardService.validateAddCreditCardResult(addCreditCardResult)

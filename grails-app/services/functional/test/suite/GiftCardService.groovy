@@ -1,8 +1,9 @@
 package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
+import com.cardfree.sdk.client.GiftCard
 
-class GiftCardService extends MobileApiService {
+class GiftCardService extends GiftCard {
     def creditCardService = new CreditCardService()
 
     def provisionGiftCardWithNewCC(Double amount, Boolean defaultCard, Boolean saveCC, token, CreditCardService.CreditCardType cardType, def inputPassword = config.userInformation.password){
@@ -23,7 +24,7 @@ class GiftCardService extends MobileApiService {
                 password: inputPassword
                 ]
         data.newCard.checkoutDetails = cardData
-        return provisionGiftCard(data, token)
+        return provisionGiftCard(token, data)
     }
 
     def provisionGiftCardWithSavedCC(Double amount, Boolean defaultCard, token, savedCreditCardToken, def inputPassword = config.userInformation.password){
@@ -45,50 +46,9 @@ class GiftCardService extends MobileApiService {
                 paymentType: "SavedCreditCard",
                 token: savedCreditCardToken
         ]
-        return provisionGiftCard(data, token)
+        return provisionGiftCard(token, data)
     }
 
-    def getAllGiftingGiftCardsForUser(def token){
-        executeMapiUserRequest("get", "gifting", null, token)
-    }
-
-    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20){
-        def autoReloadData = [
-            enabled:true,
-            thresholdTriggerAmount:triggerAmount,
-            reloadAmount:reloadAmount,
-            paymentTypeCode:"CC",
-            paymentCreditCardId:creditCardId
-        ]
-        executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token)
-    }
-
-    def provisionGiftCard(def data, def token){
-        TestOutputHelper.printServiceCall("Provision Gift Card")
-        executeMapiUserRequest("post", "gift-cards", data, token)
-    }
-
-    def addPhysicalGiftCard(def token, def cardNumber, def pin){
-        TestOutputHelper.printServiceCall("Add Physical Gift Card")
-        def dataAddPhysical = [
-                registrationRequestType: "RegisterExisting",
-                existingCard                : [
-                        userConfirmedConversionOfLegacyCard : true,
-                        setAsUserDefaultGiftCard         : false,
-                        cardNumber            : cardNumber,
-                        pin : pin
-                ]
-        ]
-        executeMapiUserRequest("post", "gift-cards", dataAddPhysical, token)
-    }
-
-    def transferGiftCardBalance(def token, def sourceGiftCardId, def destinationGiftCardId){
-        TestOutputHelper.printServiceCall("Transfer Gift Card Balance")
-        def transferData = [
-                destinationCardId: destinationGiftCardId
-        ]
-        executeMapiUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
-    }
 
     def loadValueOnExistingGiftCard(def token, def gcNumber){
         def loadValueData = [
@@ -112,15 +72,6 @@ class GiftCardService extends MobileApiService {
         executeMapiUserRequest("post", "gift-cards/${gcNumber}/transactions", loadValueData, token)
     }
 
-    def getGiftCardBalance(def token, def giftCardId){
-        TestOutputHelper.printServiceCall("Get Gift Card Balance")
-        executeMapiUserRequest("get", "gift-cards/${giftCardId}", null, token)
-    }
-
-    def getGiftCardTransactionHistory(def token, def giftCardId){
-        TestOutputHelper.printServiceCall("Get Gift Card Transaction History")
-        executeMapiUserRequest("get", "gift-cards/${giftCardId}/transactions", null, token)
-    }
 
     def static validateNewGiftCardResult(addGCResult){
         assert addGCResult.status.statusCode == 201

@@ -41,7 +41,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -80,7 +80,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         //Add Credit Card to user
         when:
-        def addCreditCardResult = creditCardService.addCreditCardToAccount(userToken)
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
 
         then:
         CreditCardService.validateAddCreditCardResult(addCreditCardResult)
@@ -110,7 +110,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         def savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -127,7 +127,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -143,7 +143,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -159,7 +159,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -175,7 +175,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -191,7 +191,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -207,7 +207,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -223,7 +223,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -239,7 +239,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -255,7 +255,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         savedGCCheckoutData = orderManagementService.getSavedGiftCardCheckoutData(addGCResult?.json?.cardId)
-        submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, savedGCCheckoutData)
 
         then:
         savedGCCheckoutData != null
@@ -294,7 +294,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
         creditCardCheckoutDetails.email = "jim@jimberry.net"
-        def submitOrderResult = orderManagementService.submitOrder(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true, deviceIdentifier)
+        def submitOrderResult = orderManagementService.submitOrderToStore(null, createOrderResult?.json?.orderId, creditCardCheckoutDetails, true, deviceIdentifier)
 
         then:
         creditCardCheckoutDetails != null
@@ -327,7 +327,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         //Submit Order
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
 
         then:
         creditCardCheckoutDetails != null
@@ -369,7 +369,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         when:
         def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
         creditCardCheckoutDetails.cardNumber = "6011000259505851"
-        def submitOrderResult = orderManagementService.submitOrder(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
 
         then:
         creditCardCheckoutDetails != null

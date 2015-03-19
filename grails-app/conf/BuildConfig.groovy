@@ -20,6 +20,7 @@ grails.project.source.level = 1.6
     // configure settings for the Console UI JVM
     console: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256]
 ]*/
+grails.plugin.location."CardfreeSDK" = "${basedir}/CardfreeSDK"
 
 grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {

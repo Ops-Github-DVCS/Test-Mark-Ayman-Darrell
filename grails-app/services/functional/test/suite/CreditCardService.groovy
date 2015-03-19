@@ -1,13 +1,21 @@
 package functional.test.suite
 
-class CreditCardService extends MobileApiService{
+import com.cardfree.sdk.client.CreditCard
+
+class CreditCardService extends CreditCard{
 
     enum CreditCardType{
         VISA, MASTERCARD, AMEX
     }
 
-    def getVisaTestCard() {
-        def data = [
+	def addTestCreditCardToAccount(def token){
+		def addCreditCardData = getVisaTestCard()
+		addCreditCardToAccount(token, addCreditCardData)
+	}
+
+
+	Map getVisaTestCard() {
+        Map data = [
                 "billingAddress": [
                         "name": "test",
                         "line1": "1072 Faxon Commons",
@@ -26,13 +34,8 @@ class CreditCardService extends MobileApiService{
         data
     }
 
-    def addCreditCardToAccount(def token){
-        def addCreditCardData = getVisaTestCard()
 
-        executeMapiUserRequest("post", "credit-cards", addCreditCardData, token)
-    }
-
-    def getVisaCheckoutDetails(){
+    Map getVisaCheckoutDetails(){
         return [
                 paymentType           : "NewCreditCard",
                 postalCode            : "02169",

@@ -1,8 +1,9 @@
 package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
+import com.cardfree.sdk.client.Gifting
 
-class GiftingService extends MobileApiService{
+class GiftingService extends Gifting{
 
     def sendEGift(def token, def checkoutDetails, def recipientEmail){
         TestOutputHelper.printServiceCall("Send EGift")
@@ -24,9 +25,6 @@ class GiftingService extends MobileApiService{
         executeMapiUserRequest("post", "gifting", data, token)
     }
 
-    def getGiftsForUser(def token){
-        executeMapiUserRequest("get", "gifting", null, token)
-    }
 
     def static validateEGiftSendResult(def sentGiftResult){
         assert sentGiftResult.status.statusCode == 200

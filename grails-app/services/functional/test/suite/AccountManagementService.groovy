@@ -1,8 +1,13 @@
 package functional.test.suite
 
-import com.cardfree.functionaltest.helpers.TestOutputHelper
+import com.cardfree.sdk.client.AccountManagement
+import grails.util.Holders
 
-class AccountManagementService extends MobileApiService{
+class AccountManagementService extends AccountManagement{
+
+	AccountManagementService() {
+		init(Holders.config)
+	}
 
     private String fetchRandomUserNameAndEmail() {
         def randomEmailSupplement = UUID.randomUUID().toString()
@@ -11,22 +16,7 @@ class AccountManagementService extends MobileApiService{
     }
 
     def provisionNewRandomUser(){
-        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password)
-    }
-
-    def provisionNewUser(userName, password) {
-        TestOutputHelper.printServiceCall("Provision New User")
-        def data = getDefaultUserDetailInformation()
-        data.password = password
-        data.userName = userName
-        data.email = userName
-
-        return executeMapiUserCreationRequest(data)
-    }
-
-    def getUserInformation(def token) {
-        TestOutputHelper.printServiceCall("Get User Information")
-        return executeMapiUserRequest("get", "/", null, token)
+        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password, getDefaultUserDetailInformation())
     }
 
 	def getUser(String oAuthToken) {
@@ -35,7 +25,7 @@ class AccountManagementService extends MobileApiService{
 	}
 
 
-    private def getDefaultUserDetailInformation(){
+    private Map getDefaultUserDetailInformation(){
         def data = [
                 firstName             : config.userInformation.firstName,
                 lastName              : config.userInformation.lastName,
