@@ -68,17 +68,19 @@ class GiftCardService extends MobileApiService {
         executeMapiUserRequest("post", "gift-cards", data, token)
     }
 
-    def addPhysicalGiftCard(def token, def cardNumber, def pin){
+    def addPhysicalGiftCard(def token, def cardNumber, def pin = null){
         TestOutputHelper.printServiceCall("Add Physical Gift Card")
         def dataAddPhysical = [
                 registrationRequestType: "RegisterExisting",
                 existingCard                : [
                         userConfirmedConversionOfLegacyCard : true,
                         setAsUserDefaultGiftCard         : false,
-                        cardNumber            : cardNumber,
-                        pin : pin
+                        cardNumber            : cardNumber
                 ]
         ]
+        if(pin){
+            dataAddPhysical.existingCard.pin = pin
+        }
         executeMapiUserRequest("post", "gift-cards", dataAddPhysical, token)
     }
 
@@ -127,7 +129,7 @@ class GiftCardService extends MobileApiService {
         assert !addGCResult?.json?.cardId?.isEmpty()
         assert !addGCResult?.json?.cardNumber?.isEmpty()
         //Make sure this is a FD card
-        assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
+        //assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
         return true
     }
 

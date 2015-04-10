@@ -37,11 +37,24 @@ class SonicMobileApiService extends MobileApiService{
         ]
         def header = [Authorization: "bearer ${getNonRegisteredOauthToken()}"]
         def oAuthResult = executeMapiRestRequest("post", "oauth/token", getOAuthEndpoint(), data, header)
-        if(!oAuthResult?.json?.accessToken?.isEmpty()){
-            return oAuthResult.json.accessToken
-        } else {
+        if(oAuthResult?.json?.accessToken?.isEmpty()){
             throw new Exception("Could not generate oAuth token for a user with these credentials.")
         }
-        oAuthResult
+        oAuthResult.json.access_token
+    }
+
+    def executeMapiUserRequest(def operation, def path, def data, def token, def guest = false, def deviceIdentifier = null){
+        if(!token){
+            token = getNonRegisteredOauthToken()
+        }
+        def header = [Authorization: "bearer ${token}", Accept: "application/json"]
+        if(guest && deviceIdentifier){
+            header = [Authorization: "bearer ${token}", Accept: "application/json", "Device-Identifier": deviceIdentifier]
+        }
+        if(guest){
+            executeMapiRestRequest(operation, "" + path, getOrderManagementRequestEndpoint(), data, header, "application/json")
+        } else {
+            executeMapiRestRequest(operation, "users/" + path, getAccountManagementRequestEndpoint(), data, header, "application/json")
+        }
     }
 }

@@ -35,16 +35,16 @@ class CreditCardService extends MobileApiService{
     def getVisaCheckoutDetails(){
         return [
                 paymentType           : "NewCreditCard",
-                postalCode            : "02169",
+                postalCode            : "11111",
                 nameOnCard            : "test test",
-                cvv                   : "444",
-                cardNumber            : "4111111111111111",
+                cvv                   : "111",
+                cardNumber            : "4788250000028291",
                 expiration            : [
                         month: 12,
                         year : 2018
                 ],
-                savePaymentInformation: true
-                ]
+                savePaymentInformation: false
+        ]
     }
 
     def getAmexTestCard(){
