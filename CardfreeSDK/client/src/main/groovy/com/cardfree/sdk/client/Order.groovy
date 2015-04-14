@@ -52,4 +52,8 @@ class Order extends OauthClient{
 	def moveOrder(String oAuthToken, String storeNumber, String orderId, def data) {
 		executeMapiUserRequest("post","orders/$storeNumber-$orderId/move", data, oAuthToken)
 	}
+
+	def reOrder(String oAuthToken, String storeNumber, String orderId) {
+		executeMapiUserRequest("post", "users/me/orders/$storeNumber-$orderId/reorder", null, oAuthToken)
+	}
 }

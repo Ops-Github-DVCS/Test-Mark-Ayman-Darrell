@@ -40,7 +40,7 @@ class OrderManagementService extends Order{
                         "year":2018
                 ]
         ]
-        executeMapiUserRequest("post", "users/me/orders/${config.orderInformation.storeNumber}-${orderJson.orderId}/checkout", paymentData ?: defaultPaymentData, oAuthToken)
+        executeMapiUserRequest("post", "orders/${config.orderInformation.storeNumber}-${orderJson.orderId}/checkout", paymentData ?: defaultPaymentData, oAuthToken)
     }
 
 

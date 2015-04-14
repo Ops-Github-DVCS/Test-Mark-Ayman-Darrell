@@ -409,7 +409,7 @@ class TBOffersIntegrationSpec extends FunctionalSpecBase {
 		submitOrderResponse.json.status == 'Success'
 
 		when: "re-order"
-		def reorderResponse = tacoBellapiLayerGCTestCall("post", "users/me/orders/$STORE_ID-$submitOrderResponse.json.orderId/reorder", null, oAuthToken)
+		def reorderResponse = orderManagementService.reOrder(oAuthToken, STORE_ID, createOrderResponse.json.orderId)
 		then: "the offer is used"
 		reorderResponse.json.subtotal == submitOrderResponse.json.subtotal
 		reorderResponse.json.tax == offerResponse.json.tax // We have not yet applied the offer with Tillster, tax should not reflect discount
@@ -839,7 +839,7 @@ class TBOffersIntegrationSpec extends FunctionalSpecBase {
 		submitOrderResponse.json.status == 'Success'
 
 		when:
-		def orderHistoryResponse = orderHistory(oAuthToken)
+		def orderHistoryResponse = orderManagementService.orderHistory(oAuthToken)
 
 		then:
 		// let's look at the order since there is no history
@@ -959,7 +959,7 @@ class TBOffersIntegrationSpec extends FunctionalSpecBase {
 
 
 		when:
-		def cancelOrderResponse = cancelOrder(oAuthToken, createOrderResponse.json)
+		def cancelOrderResponse = orderManagementService.cancelOrder(oAuthToken, createOrderResponse.json)
 
 		then:
 		cancelOrderResponse.status?.statusCode?.equals(204)
