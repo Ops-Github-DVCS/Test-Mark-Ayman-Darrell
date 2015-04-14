@@ -278,6 +278,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
+    @Ignore
     def "Submit GUEST order with new CC"(){
         //Setup Device Identifier
         setup:

@@ -50,6 +50,46 @@ class GiftCardService extends GiftCard {
     }
 
 
+    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20){
+        def autoReloadData = [
+            enabled:true,
+            thresholdTriggerAmount:triggerAmount,
+            reloadAmount:reloadAmount,
+            paymentTypeCode:"CC",
+            paymentCreditCardId:creditCardId
+        ]
+        executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token)
+    }
+
+    def provisionGiftCard(def data, def token){
+        TestOutputHelper.printServiceCall("Provision Gift Card")
+        executeMapiUserRequest("post", "gift-cards", data, token)
+    }
+
+    def addPhysicalGiftCard(def token, def cardNumber, def pin = null){
+        TestOutputHelper.printServiceCall("Add Physical Gift Card")
+        def dataAddPhysical = [
+                registrationRequestType: "RegisterExisting",
+                existingCard                : [
+                        userConfirmedConversionOfLegacyCard : true,
+                        setAsUserDefaultGiftCard         : false,
+                        cardNumber            : cardNumber
+                ]
+        ]
+        if(pin){
+            dataAddPhysical.existingCard.pin = pin
+        }
+        executeMapiUserRequest("post", "gift-cards", dataAddPhysical, token)
+    }
+
+    def transferGiftCardBalance(def token, def sourceGiftCardId, def destinationGiftCardId){
+        TestOutputHelper.printServiceCall("Transfer Gift Card Balance")
+        def transferData = [
+                destinationCardId: destinationGiftCardId
+        ]
+        executeMapiUserRequest("post", "gift-cards/${sourceGiftCardId}/balance-transfers", transferData, token)
+    }
+
     def loadValueOnExistingGiftCard(def token, def gcNumber){
         def loadValueData = [
             loadAmount:[
@@ -78,7 +118,7 @@ class GiftCardService extends GiftCard {
         assert !addGCResult?.json?.cardId?.isEmpty()
         assert !addGCResult?.json?.cardNumber?.isEmpty()
         //Make sure this is a FD card
-        assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
+        //assert addGCResult?.json?.cardNumber?.toString().startsWith("77")
         return true
     }
 

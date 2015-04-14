@@ -11,7 +11,7 @@ class AccountManagementService extends AccountManagement{
 
     private String fetchRandomUserNameAndEmail() {
         def randomEmailSupplement = UUID.randomUUID().toString()
-        def userNameAndEmail = "${config.userInformation.emailPrefix}${randomEmailSupplement.split("-")[0]}${config.userInformation.emailSuffix}"
+        def userNameAndEmail = "${config.userInformation.emailPrefix}+${randomEmailSupplement.split("-")[0]}${config.userInformation.emailSuffix}"
         userNameAndEmail
     }
 

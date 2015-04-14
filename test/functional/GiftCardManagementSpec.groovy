@@ -56,7 +56,6 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
-    @Ignore
     def "Provision gift card with new credit card"(){
         //Create New User
         when:
@@ -86,6 +85,12 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         then:
         getBalanceResult != null
         getBalanceResult.status.statusCode == 200
+
+        when:
+        def getUserResult = accountManagementService.getUserInformation(userToken)
+
+        then:
+        getUserResult != null
     }
 
     @Ignore
@@ -145,7 +150,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
         //Add Physical Visa Gift Card to Account
         when:
-        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberVisa, config.giftCardInformation.physicalCardPinVisa)
+        def addVisaGCResult = giftCardService.addPhysicalGiftCard(userToken, config.giftCardInformation.physicalCardNumberVisa)
 
         then:
         GiftCardService.validateNewGiftCardResult(addVisaGCResult)
@@ -179,6 +184,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         loadValuleresult != null
     }
 
+    @Ignore
     def "Add physical First Data Gift Card"(){
         //Create New User
         when:
