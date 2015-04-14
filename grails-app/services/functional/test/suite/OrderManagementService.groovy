@@ -5,7 +5,7 @@ import com.cardfree.sdk.client.Order
 
 class OrderManagementService extends Order{
 
-    def createOrder(def token, def guest = false, def deviceIdetifier = null) {
+    def createOrder(def token, def guest = false, def deviceIdentifier = null) {
         TestOutputHelper.printServiceCall("Create Order")
         def orderData = [
                 restaurantId: config.orderInformation.storeNumber,
@@ -16,7 +16,7 @@ class OrderManagementService extends Order{
                         modifierOptions: []
                 ]
         ]
-        def orderResult = executeMapiUserRequest("post", "orders", orderData, token, guest, deviceIdetifier)
+        def orderResult = executeMapiUserRequest("post", "orders", orderData, token, guest, deviceIdentifier)
         orderResult
     }
 

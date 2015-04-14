@@ -16,7 +16,7 @@ class AccountManagementService extends AccountManagement{
     }
 
     def provisionNewRandomUser(){
-        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password, getDefaultUserDetailInformation())
+ 	        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password, getDefaultUserDetailInformation())
     }
 
 	def getUser(String oAuthToken) {
