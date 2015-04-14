@@ -2,8 +2,15 @@ package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
 import com.cardfree.sdk.client.Order
+import grails.util.Holders
 
 class OrderManagementService extends Order{
+
+    public OrderManagementService(String storeNumber) {
+        super(storeNumber)
+        init(Holders.config)
+    }
+
 
     def createOrder(def token, def guest = false, def deviceIdentifier = null) {
         TestOutputHelper.printServiceCall("Create Order")
@@ -20,7 +27,24 @@ class OrderManagementService extends Order{
         orderResult
     }
 
-	def submitOrderToStore(String token, String orderId, def checkoutData, boolean guest = false, String deviceIdentifier = null){
+    // todo merge with following call
+    def submitOrderDefaultCC(String oAuthToken, def orderJson, def paymentData = null) {
+        Map defaultPaymentData = [
+                "paymentType": "NewCreditCard",
+                "postalCode":"00000",
+                "nameOnCard":"testfirst testlast",
+                "cvv": "111",
+                "cardNumber":"4111111111111111",
+                "expiration":[
+                        "month":6,
+                        "year":2018
+                ]
+        ]
+        executeMapiUserRequest("post", "users/me/orders/${config.orderInformation.storeNumber}-${orderJson.orderId}/checkout", paymentData ?: defaultPaymentData, oAuthToken)
+    }
+
+
+    def submitOrderToStore(String token, String orderId, def checkoutData, boolean guest = false, String deviceIdentifier = null){
 		submitOrder(token, config.orderInformation.storeNumber, orderId, checkoutData, guest, deviceIdentifier)
 	}
 

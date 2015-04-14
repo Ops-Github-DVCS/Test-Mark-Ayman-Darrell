@@ -1,6 +1,6 @@
 testExecution {
-    merchant = "peets"
-    endpoint = "test_local"
+    merchant = "tacobell"
+    endpoint = "test_dev"
     prettyPrintJSON = false
 }
 
@@ -109,6 +109,8 @@ userInformation{
 
 orderInformation{
     storeNumber = "E720329"
+    storeTaxesDiscount = false
+    moveToStoreNumber = "021498"
     //storeNumber = "027505"
     plu = "1003"
 }

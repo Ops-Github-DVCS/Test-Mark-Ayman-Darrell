@@ -16,7 +16,7 @@ class FunctionalSpecBase extends Specification{
     def mobileApiService = new MobileApiService()
     def accountManagementService = new AccountManagementService()
     def giftCardService = new GiftCardService()
-    def orderManagementService = new OrderManagementService()
+    def orderManagementService = new OrderManagementService(config.orderInformation.storeNumber)
     def giftingService = new GiftingService()
     def creditCardService = new CreditCardService()
 	def offerService = new OfferService()

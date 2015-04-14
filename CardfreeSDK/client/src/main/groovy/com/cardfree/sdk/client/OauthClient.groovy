@@ -42,7 +42,7 @@ class OauthClient extends ConfiguredApiClient{
 	}
 
 	String getRegisteredUserToken(String userName, String password){
-		log("Get registered user oAuth Token")
+		log.debug("Get registered user oAuth Token")
 		def unregisteredToken = getNonRegisteredOauthToken()
 		def data = [
 				grantType: "password_grant",
