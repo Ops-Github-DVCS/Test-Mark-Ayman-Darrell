@@ -55,5 +55,17 @@ class Order extends OauthClient{
 
 	def reOrder(String oAuthToken, String storeNumber, String orderId) {
 		executeMapiUserRequest("post", "users/me/orders/$storeNumber-$orderId/reorder", null, oAuthToken)
+
+	}
+
+	def pickupOrder(String token, String storeNumber, String orderId, boolean guest = false, String deviceIdentifier = null){
+		log.debug("Pickup Order")
+		if (!storeNumber) { storeNumber = config.orderInformation.storeNumber }
+		def locationData = [
+				"pickupLocation" : "drive-through",
+				"pickupTime" : "2015-04-15T15:25:00-07:00"
+		]
+		def checkoutResult = executeMapiUserRequest("post", "orders/$storeNumber-${orderId}/pickup", locationData, token, guest, deviceIdentifier)
+		checkoutResult
 	}
 }

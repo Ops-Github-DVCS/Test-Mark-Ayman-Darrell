@@ -302,8 +302,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
-    @Ignore
-    def "Submit order with new Credit Card"(){
+    def "Pickup order with new Credit Card"(){
         //Create New User
         when:
         def userResult = accountManagementService.provisionNewRandomUser()
@@ -334,13 +333,12 @@ class OrderManagementSpec extends FunctionalSpecBase{
         creditCardCheckoutDetails != null
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
 
-        //Check Transaction History
+        //Pickup Order
         when:
-        def transactionHistoryResult = giftCardService.getGiftCardTransactionHistory(userToken, "b5033382-73b5-46bc-a39c-af2b969a75c4")
+        def pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
 
         then:
-        transactionHistoryResult != null
-
+        pickupOrderResult.status == 200
     }
 
     @Ignore
