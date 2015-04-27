@@ -25,7 +25,7 @@ class AccountManagementService extends AccountManagement{
 	}
 
 
-    private Map getDefaultUserDetailInformation(){
+    public Map getDefaultUserDetailInformation(){
         def data = [
                 firstName             : config.userInformation.firstName,
                 lastName              : config.userInformation.lastName,
