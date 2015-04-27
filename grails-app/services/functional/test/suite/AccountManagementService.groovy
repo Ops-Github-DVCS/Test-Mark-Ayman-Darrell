@@ -5,9 +5,9 @@ import grails.util.Holders
 
 class AccountManagementService extends AccountManagement{
 
-	AccountManagementService() {
-		init(Holders.config)
-	}
+    AccountManagementService() {
+        init(Holders.config)
+    }
 
     private String fetchRandomUserNameAndEmail() {
         def randomEmailSupplement = UUID.randomUUID().toString()
@@ -16,14 +16,13 @@ class AccountManagementService extends AccountManagement{
     }
 
     def provisionNewRandomUser(){
- 	        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password, getDefaultUserDetailInformation())
+        return provisionNewUser(fetchRandomUserNameAndEmail(), config.userInformation.password, getDefaultUserDetailInformation())
     }
 
-	def getUser(String oAuthToken) {
-		def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
-		executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
-	}
-
+    def getUser(String oAuthToken) {
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
+    }
 
     public Map getDefaultUserDetailInformation(){
         def data = [
@@ -36,8 +35,8 @@ class AccountManagementService extends AccountManagement{
                         operatingSystem       : config.userInformation.operatingSystem,
                         operatingSystemVersion: config.userInformation.operatingSystemVersion
                 ],
-				zip: '80202',
-				birthdayInfo: [month: 2, day: 15, year: 1980]
+                zip: '80202',
+                birthdayInfo: [month: 2, day: 15, year: 1980]
         ]
         return data
     }
