@@ -1,5 +1,5 @@
 testExecution {
-    merchant = "tacobell"
+    merchant = "peets"
     endpoint = "test_dev"
     prettyPrintJSON = false
 }
@@ -269,7 +269,7 @@ testConfigurations{
                 dunkin = "account-management/v1/"
                 sonic = "hedgehog/v1.1/"
                 checkers = "account-management/v1/"
-                peets = "account-management/v1/"
+                peets = "account-management/v2/"
             }
             order_management_application {
                 tacobell = "order-management/v1/"
@@ -387,6 +387,8 @@ log4j.main = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+
+    info 'com.cardfree.sdk.client'
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
