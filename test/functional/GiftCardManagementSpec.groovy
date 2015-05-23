@@ -4,6 +4,7 @@ import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
 import functional.test.suite.OrderManagementService
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
@@ -56,7 +57,8 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         transactionHistoryResult != null
     }
 
-    def "Provision gift card with new credit card"(){
+    @IgnoreRest
+    def "Provision gift card with saved credit card"(){
         //Create New User
         when:
         def userResult = accountManagementService.provisionNewRandomUser()
@@ -71,9 +73,87 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         then:
         !userToken.isEmpty()
 
+        //Add Credit Card to user
+        when:
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
+
+        then:
+        CreditCardService.validateAddCreditCardResult(addCreditCardResult)
+        addCreditCardResult != null
+
+        when:
+        def creditCards = creditCardService.getCreditCardsForAccount(userToken)
+
+        then:
+        creditCards != null
+
+        //Add GC to user using a new Visa CC
+        when:
+        def addGCResult = giftCardService.provisionGiftCardWithSavedCC(10.00, false, userToken, addCreditCardResult?.json?.creditCardId)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult)
+        /*
         //Add GC to user using a new Visa CC
         when:
         def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult)
+*/
+        //Update Card Balance
+        when:
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult != null
+        getBalanceResult.status.statusCode == 200
+
+        when:
+        def getUserResult = accountManagementService.getUserInformation(userToken)
+
+        then:
+        getUserResult != null
+    }
+
+    def "Provision gift card with saved credit card FB user"(){
+        //Create New User
+        /*when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)*/
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken("1405832996409006", config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        when:
+        def userInfo = accountManagementService.getUser(userToken)
+
+        then:
+        !userInfo.isEmpty()
+
+        /*//Add Credit Card to user
+      when:
+      def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
+
+      then:
+      CreditCardService.validateAddCreditCardResult(addCreditCardResult)
+      addCreditCardResult != null*/
+
+        when:
+        def creditCards = creditCardService.getCreditCardsForAccount(userToken)
+
+        then:
+        creditCards != null
+
+        //Add GC to user using a new Visa CC
+        when:
+        def addGCResult = giftCardService.provisionGiftCardWithSavedCC(10.00, false, userToken, creditCards.json.data[0].creditCardId)
 
         then:
         GiftCardService.validateNewGiftCardResult(addGCResult)

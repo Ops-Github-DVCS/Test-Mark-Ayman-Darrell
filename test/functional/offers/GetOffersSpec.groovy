@@ -4,6 +4,7 @@ import com.cardfree.functionaltests.specbase.FunctionalSpecBase
 import functional.test.suite.AccountManagementService
 import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 
@@ -43,6 +44,7 @@ class GetOffersSpec extends FunctionalSpecBase {
 		}
 	}
 
+	@IgnoreRest
 	def "user with 5 points should get free fries automated reward with Checkers"() {
 		//Create New User
 		when:
@@ -59,6 +61,12 @@ class GetOffersSpec extends FunctionalSpecBase {
 		!userToken.isEmpty()
 
 		when:
+		def loyaltyProgramResult1 = offerService.getLoyaltyProgramDetails(userToken)
+
+		then:
+		loyaltyProgramResult1 != null
+
+		when:
 		def offerResult = offerService.getLoyaltyRewards(userToken, "2015-03-07T12:00:01")
 		def rewards = offerResult.json.data
 
@@ -66,11 +74,29 @@ class GetOffersSpec extends FunctionalSpecBase {
 		offerResult.status.statusCode == 200
 		rewards.size() == 0
 
+		/*
 		when:
-		def addGCResult = giftCardService.provisionGiftCardWithNewCC(75.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
+		def giftCardService2 = new GiftCardService(creditCardService)
+		def addGCResult = giftCardService2.provisionGiftCardWithNewCC(75.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
 
 		then:
 		addGCResult.status.statusCode == 201
+		*/
+
+		when:
+ 		def checkinEventResult = offerService.postLoyaltyCheckinEvent("8fa637d3-9f60-4659-8464-2ff867ae0af9", userResult.json.email, userToken)
+		16.times {
+			offerService.postLoyaltyCheckinEvent("8fa637d3-9f60-4659-8464-2ff867ae0af9", userResult.json.email, userToken)
+		}
+
+		then:
+		checkinEventResult != null
+
+		when:
+		def loyaltyProgramResult = offerService.getLoyaltyProgramDetails(userToken)
+
+		then:
+		loyaltyProgramResult != null
 
 		when:
 		offerResult = offerService.getLoyaltyRewards(userToken, "2015-03-07T12:00:02")

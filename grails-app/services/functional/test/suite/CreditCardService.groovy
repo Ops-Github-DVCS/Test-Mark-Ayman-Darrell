@@ -18,6 +18,10 @@ class CreditCardService extends CreditCard{
 		addCreditCardToAccount(token, addCreditCardData)
 	}
 
+    def getCreditCardsForAccount(def token){
+        getCreditCardsForThisAccount(token)
+    }
+
 
 	Map getVisaTestCard() {
         Map data = [

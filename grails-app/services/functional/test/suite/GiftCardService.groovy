@@ -3,6 +3,7 @@ package functional.test.suite
 import com.cardfree.functionaltest.helpers.TestOutputHelper
 import com.cardfree.sdk.client.GiftCard
 import grails.util.Holders
+import spock.lang.IgnoreRest
 
 class GiftCardService extends GiftCard {
     def creditCardService = new CreditCardService()
@@ -44,12 +45,21 @@ class GiftCardService extends GiftCard {
                         cardDesignId                     : 3,
                         customSuppliedUserDesign         : true,
                         customSuppliedUserDesignImageName: "test-me-image",
-                ],
-                password: inputPassword
+                        password: inputPassword
+                ]
+
         ]
         data.newCard.checkoutDetails = [
                 paymentType: "SavedCreditCard",
-                token: savedCreditCardToken
+                token: savedCreditCardToken,
+                creditCardId: savedCreditCardToken
+        ]
+        data.newCard.giftCardAutoReloadSettings = [
+            enabled:true,
+            thresholdTriggerAmount:15,
+            reloadAmount:25,
+            paymentTypeCode:"CC",
+            paymentCreditCardId:savedCreditCardToken
         ]
         return provisionGiftCard(token, data)
     }
