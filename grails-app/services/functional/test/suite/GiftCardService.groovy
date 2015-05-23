@@ -2,11 +2,13 @@ package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
 import com.cardfree.sdk.client.GiftCard
+import grails.util.Holders
 
 class GiftCardService extends GiftCard {
     def creditCardService = new CreditCardService()
+    //def config = Holders.config
 
-    def provisionGiftCardWithNewCC(Double amount, Boolean defaultCard, Boolean saveCC, token, CreditCardService.CreditCardType cardType, def inputPassword = config.userInformation.password){
+    def provisionGiftCardWithNewCC(Double amount, Boolean defaultCard, Boolean saveCC, token, CreditCardService.CreditCardType cardType, def inputPassword = Holders.config.userInformation.password){
         def cardData = creditCardService.getVisaCheckoutDetails()
         def data = [
                 registrationRequestType: "ProvisionWithFunds",
@@ -14,7 +16,7 @@ class GiftCardService extends GiftCard {
                         setAsUserDefaultGiftCard         : defaultCard,
                         loadAmount                       : [
                                 amount      : amount,
-                                currencyCode: config.userInformation.currencyCode
+                                currencyCode: Holders.config.userInformation.currencyCode
                         ],
                         cardDesignId                     : 3,
                         customSuppliedUserDesign         : true,
@@ -27,14 +29,14 @@ class GiftCardService extends GiftCard {
         return provisionGiftCard(token, data)
     }
 
-    def provisionGiftCardWithSavedCC(Double amount, Boolean defaultCard, token, savedCreditCardToken, def inputPassword = config.userInformation.password){
+    def provisionGiftCardWithSavedCC(Double amount, Boolean defaultCard, token, savedCreditCardToken, def inputPassword = Holders.config.userInformation.password){
         def data = [
                 registrationRequestType: "ProvisionWithFunds",
                 newCard                : [
                         setAsUserDefaultGiftCard         : defaultCard,
                         loadAmount                       : [
                                 amount      : amount,
-                                currencyCode: config.userInformation.currencyCode
+                                currencyCode: Holders.config.userInformation.currencyCode
                         ],
                         cardDesignId                     : 3,
                         customSuppliedUserDesign         : true,
