@@ -2,6 +2,7 @@ package functional.test.suite
 
 import com.cardfree.functionaltest.helpers.TestOutputHelper
 import com.cardfree.sdk.client.GiftCard
+import grails.util.Holders
 
 class GiftCardService extends GiftCard {
     def creditCardService = new CreditCardService()
