@@ -24,6 +24,14 @@ class AccountManagementService extends AccountManagement{
 		executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
 	}
 
+    def updateUserLoyaltyId(String oAuthToken, String loyaltyId, Boolean loyaltyOptedIn) {
+        def data = [
+                loyaltyId: loyaltyId,
+                loyaltyOptedIn: loyaltyOptedIn
+        ]
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("put", "users/me/loyalty-id", getAccountManagementRequestEndpoint(), data, header, "application/json")
+    }
 
     private Map getDefaultUserDetailInformation(){
         def data = [
@@ -37,7 +45,9 @@ class AccountManagementService extends AccountManagement{
                         operatingSystemVersion: config.userInformation.operatingSystemVersion
                 ],
 				zip: '80202',
-				birthdayInfo: [month: 2, day: 15, year: 1980]
+				birthdayInfo: [month: 2, day: 15, year: 1980],
+                loyaltyId: UUID.randomUUID().toString(),
+                loyaltyOptedIn: Boolean.TRUE
         ]
         return data
     }

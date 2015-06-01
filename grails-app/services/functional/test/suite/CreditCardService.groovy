@@ -41,7 +41,8 @@ class CreditCardService extends CreditCard{
                 postalCode            : "11111",
                 nameOnCard            : "test test",
                 cvv                   : "111",
-                cardNumber            : "4788250000028291",
+                cardNumber            : "4111111111111111",
+                /*cardNumber            : "4788250000028291",*/
                 expiration            : [
                         month: 12,
                         year : 2018

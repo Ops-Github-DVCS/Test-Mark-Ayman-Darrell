@@ -8,6 +8,7 @@ import groovy.transform.InheritConstructors
 class AccountManagement extends OauthClient{
 
 	def provisionNewUser(String userName, String password, Map userData) {
+		println("   Provision New User")
 		log.debug("Provision New User")
 		def data = userData
 		data.password = password
@@ -18,11 +19,13 @@ class AccountManagement extends OauthClient{
 	}
 
 	def getUser(String oAuthToken) {
+		println("   Get User")
 		def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
 		executeRestRequest("get", "users/me", getAccountManagementRequestEndpoint(), null, header, "application/json")
 	}
 
 	def getUserInformation(String token) {
+		println("   Get User Information")
 		log.debug("Get User Information")
 		return executeMapiUserRequest("get", "/", null, token)
 	}

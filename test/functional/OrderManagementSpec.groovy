@@ -302,7 +302,102 @@ class OrderManagementSpec extends FunctionalSpecBase{
         OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
     }
 
+    @Ignore
+    def "Submit order with new Credit Card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+    }
+
+    @Ignore
     def "Pickup order with new Credit Card"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Refresh User Token
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Pickup Order
+        when:
+        def pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
+
+        then:
+        pickupOrderResult.status.statusCode == 200
+
+        //Refresh User Token
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Get Offers
+        when:
+        def getOffersResult = offerService.getOffers(userToken, "2015-04-15T17:25:00-07:00");
+
+        then:
+        getOffersResult.status.statusCode == 200
+    }
+
+    @Ignore
+    def "Pickup order with with offer"(){
         //Create New User
         when:
         def userResult = accountManagementService.provisionNewRandomUser()
@@ -338,7 +433,187 @@ class OrderManagementSpec extends FunctionalSpecBase{
         def pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
 
         then:
-        pickupOrderResult.status == 200
+        pickupOrderResult.status.statusCode == 200
+
+        //Get Offers
+        when:
+        def getOffersResult = offerService.getOffers(userToken, "2015-04-15T17:25:00-07:00");
+
+        then:
+        getOffersResult.status.statusCode == 200
+
+        //Refresh User Token
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Another Order
+        when:
+        def createOrderResultSecond = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResultSecond)
+
+        //Add a burrito to the order
+        when:
+        def orderData = [
+                storeNumber: createOrderResultSecond?.json?.storeNumber,
+                orderId: createOrderResultSecond?.json?.orderId
+        ]
+        def addItemToOrderResultSecond = orderManagementService.addItemToOrder(userToken, orderData, "22449")
+
+        then:
+        addItemToOrderResultSecond.status.statusCode == 201
+
+        //Add another burrito to the order
+        when:
+        orderData = [
+                storeNumber: createOrderResultSecond?.json?.storeNumber,
+                orderId: createOrderResultSecond?.json?.orderId
+        ]
+        def addItemToOrderResultAdditional = orderManagementService.addItemToOrder(userToken, orderData, "22230")
+
+        then:
+        addItemToOrderResultAdditional.status.statusCode == 201
+
+        //Apply Offer
+        when:
+        def redemptionCode = getOffersResult?.json?.data[0].redemptionCode
+        def applyOfferResultSecond = offerService.applyOffer(userToken, redemptionCode, orderData)
+
+        then:
+        applyOfferResultSecond.status.statusCode == 200
+
+        //Get the order total
+        when:
+        def orderTotalResultSecond = orderManagementService.orderTotal(userToken, createOrderResultSecond?.json?.orderId)
+
+        then:
+        orderTotalResultSecond.status.statusCode == 200
+
+        //Submit the second Order
+        when:
+        def creditCardCheckoutDetailsSecond = creditCardService.visaCheckoutDetails
+        def submitOrderResultSecond = orderManagementService.submitOrderToStore(userToken, createOrderResultSecond?.json?.orderId, creditCardCheckoutDetailsSecond)
+
+        then:
+        creditCardCheckoutDetailsSecond != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResultSecond)
+
+        //Pickup Order
+        when:
+        def pickupOrderResultSecond = orderManagementService.pickupOrder(userToken, null, createOrderResultSecond?.json?.orderId)
+
+        then:
+        pickupOrderResult.status.statusCode == 200
+    }
+
+    def "Submit order with with offer"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Order
+        when:
+        def createOrderResult = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Pickup Order
+        when:
+        def pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
+
+        then:
+        pickupOrderResult.status.statusCode == 200
+
+        //Get Offers
+        when:
+        def getOffersResult = offerService.getOffers(userToken, "2015-04-15T17:25:00-07:00");
+
+        then:
+        getOffersResult.status.statusCode == 200
+
+        //Refresh User Token
+        when:
+        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        //Create Another Order
+        when:
+        def createOrderResultSecond = orderManagementService.createOrder(userToken)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResultSecond)
+
+        //Add a burrito to the order
+        when:
+        def orderData = [
+                storeNumber: createOrderResultSecond?.json?.storeNumber,
+                orderId: createOrderResultSecond?.json?.orderId
+        ]
+        def addItemToOrderResultSecond = orderManagementService.addItemToOrder(userToken, orderData, "22449")
+
+        then:
+        addItemToOrderResultSecond.status.statusCode == 201
+
+        //Add another burrito to the order
+        when:
+        orderData = [
+                storeNumber: createOrderResultSecond?.json?.storeNumber,
+                orderId: createOrderResultSecond?.json?.orderId
+        ]
+        def addItemToOrderResultAdditional = orderManagementService.addItemToOrder(userToken, orderData, "22230")
+
+        then:
+        addItemToOrderResultAdditional.status.statusCode == 201
+
+        //Apply Offer
+        when:
+        def redemptionCode = getOffersResult?.json?.data[0].redemptionCode
+        def applyOfferResultSecond = offerService.applyOffer(userToken, redemptionCode, orderData)
+
+        then:
+        applyOfferResultSecond.status.statusCode == 200
+
+        //Get the order total
+        when:
+        def orderTotalResultSecond = orderManagementService.orderTotal(userToken, createOrderResultSecond?.json?.orderId)
+
+        then:
+        orderTotalResultSecond.status.statusCode == 200
+
+        //Submit the second Order
+        when:
+        def creditCardCheckoutDetailsSecond = creditCardService.visaCheckoutDetails
+        def submitOrderResultSecond = orderManagementService.submitOrderToStore(userToken, createOrderResultSecond?.json?.orderId, creditCardCheckoutDetailsSecond)
+
+        then:
+        creditCardCheckoutDetailsSecond != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResultSecond)
     }
 
     @Ignore
@@ -380,7 +655,5 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         transactionHistoryResult != null
-
     }
-
 }
