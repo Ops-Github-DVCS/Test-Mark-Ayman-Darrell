@@ -33,6 +33,43 @@ class AccountManagementService extends AccountManagement{
         executeRestRequest("put", "users/me/loyalty-id", getAccountManagementRequestEndpoint(), data, header, "application/json")
     }
 
+    def getUserAddress(String oAuthToken, int userAddressId) {
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("get", "users/me/address/${userAddressId}", getAccountManagementRequestEndpoint(), null, header, "application/json")
+    }
+
+    def createUserAddress(String oAuthToken, data) {
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("post", "users/me/address", getAccountManagementRequestEndpoint(), data, header, "application/json")
+    }
+
+    def updateUserAddress(String oAuthToken, userAddressId, data) {
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("put", "users/me/address/${userAddressId}", getAccountManagementRequestEndpoint(), data, header, "application/json")
+    }
+
+    public Map getUserAddressInformation1(){
+        def data = [
+                addressLine1          : '2082 Golden Horse Arbor',
+                addressLine2          : '',
+                city: 'Hobby',
+                state: 'Indiana',
+                postalCode: '47845-7214'
+        ]
+        return data
+    }
+
+    public Map getUserAddressInformation2(){
+        def data = [
+                addressLine1          : '1605 Velvet Boulevard',
+                addressLine2          : '',
+                city: 'Galaxy',
+                state: 'Kentucky',
+                postalCode: '40583-6824'
+        ]
+        return data
+    }
+
     private Map getDefaultUserDetailInformation(){
         def data = [
                 firstName             : config.userInformation.firstName,

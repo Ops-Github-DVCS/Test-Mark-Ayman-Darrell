@@ -114,4 +114,57 @@ class UserManagementSpec extends FunctionalSpecBase{
         getUpdatedUserResult.json.loyaltyId != loyaltyId
         getUpdatedUserResult.json.loyaltyOptedIn == loyaltyOptedIn
     }
+
+    def "Create new and then update user address"() {
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        // Create user address
+        when:
+        def createUserAddressResult = accountManagementService.createUserAddress(userToken, accountManagementService.getUserAddressInformation1())
+
+        then:
+        createUserAddressResult != null
+        createUserAddressResult.json.id != null
+        createUserAddressResult.status.statusCode == 201
+
+        def userAddressId = createUserAddressResult.json.id
+
+        // Get user address
+        when:
+        def getUserAddressResult = accountManagementService.getUserAddress(userToken, userAddressId)
+
+        then:
+        getUserAddressResult != null
+        getUserAddressResult.json != null
+        getUserAddressResult.status.statusCode == 200
+
+        // Update user address
+        when:
+        def updateUserAddressResult = accountManagementService.updateUserAddress(userToken, userAddressId, accountManagementService.getUserAddressInformation2())
+
+        then:
+        updateUserAddressResult != null
+        updateUserAddressResult.json != null
+        updateUserAddressResult.status.statusCode == 200
+
+        when:
+        def getUserResult = accountManagementService.getUserInformation(userToken)
+
+        then:
+        getUserResult != null
+        // Only one address
+        getUserResult.json.addresses.data.size() == 1
+        getUserResult.json.addresses.data[0].id == userAddressId
+    }
 }
