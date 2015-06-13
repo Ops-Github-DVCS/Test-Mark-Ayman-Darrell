@@ -108,7 +108,7 @@ userInformation{
 }
 
 orderInformation{
-    storeNumber = "E720329"
+    storeNumber = "002984"
     storeTaxesDiscount = false
     moveToStoreNumber = "021498"
     //storeNumber = "027505"
@@ -265,14 +265,14 @@ testConfigurations{
                 peets = "https://dev-pee-api01.cardfree.net/"
             }
             account_management_application {
-                tacobell = "account-management/v1/"
+                tacobell = "account-management/wo/"
                 dunkin = "account-management/v1/"
                 sonic = "hedgehog/v1.1/"
                 checkers = "account-management/v1/"
                 peets = "account-management/v1/"
             }
             order_management_application {
-                tacobell = "order-management/v1/"
+                tacobell = "order-management/wo/"
                 dunkin = "order-management/v1/"
             }
         }
@@ -293,25 +293,30 @@ testConfigurations{
             url {
                 tacobell = "https://uat01-app.cardfree.net/"
                 checkers = "https://uat-che-api01.cardfree.net/"
+                peets = "https://uat-pee-api01.cardfree.net/"
             }
             id {
                 tacobell = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
                 checkers = "D93B5A92DA0D11E3BF4B005056B046D7"
+                peets = "9276F5AB5A3144C69C5AB058B9DBF2D5"
             }
             secret {
                 tacobell = "5e7abeda-27bb-49eb-b58e-edd456b4c477"
                 checkers = "D9556C1DDA0D11E3BF4B005056B046D7"
+                peets = "DA08EAF725F14A52A2A6C360173F6F86"
             }
         }
         api {
             address {
                 tacobell = "https://uat01-app.cardfree.net/"
 				checkers = "https://uat-che-api01.cardfree.net/"
+                peets = "https://uat-pee-api01.cardfree.net/"
 
             }
             account_management_application {
                 tacobell = "account-management/v1/"
 				checkers = "account-management/v1/"
+                peets = "account-management/v1/"
             }
             order_management_application {
                 tacobell = "order-management/v1/"
@@ -387,6 +392,8 @@ log4j.main = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+
+    info 'com.cardfree.sdk.client'
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
