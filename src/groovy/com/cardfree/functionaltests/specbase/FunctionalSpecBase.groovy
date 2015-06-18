@@ -7,9 +7,12 @@ import functional.test.suite.GiftingService
 import functional.test.suite.MobileApiService
 import functional.test.suite.OfferService
 import functional.test.suite.OrderManagementService
+import grails.test.mixin.TestMixin
+import grails.test.mixin.web.ControllerUnitTestMixin
 import grails.util.Holders
 import spock.lang.Specification
 
+@TestMixin(ControllerUnitTestMixin)
 class FunctionalSpecBase extends Specification{
     static def config = Holders.config
 
