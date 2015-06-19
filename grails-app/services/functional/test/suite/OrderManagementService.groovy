@@ -16,7 +16,7 @@ class OrderManagementService extends Order{
         TestOutputHelper.printServiceCall("Create Order")
         def orderData = [
                 restaurantId: config.orderInformation.storeNumber,
-                storeNumber : config.orderInformation.storeNumberm,
+                storeNumber : config.orderInformation.storeNumber,
                 orderItem   : [
                         plu            : config.orderInformation.plu,
                         quantity       : 1,
