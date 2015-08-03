@@ -95,36 +95,31 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
 
     @Ignore
     def "Reload fails with bad credit card"(){
-        //Create New User
-        when:
+        when: "Create New User"
         def userResult = accountManagementService.provisionNewRandomUser()
 
-        then:
+        then: "get a valid user"
         AccountManagementService.validateNewUser(userResult)
 
-        //Login User
-        when:
+        when: "Login User"
         def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
 
-        then:
+        then: "valid token"
         !userToken.isEmpty()
 
-        //Add GC to user using a new Visa CC
-        when:
+        when: "Add GC to user using a new Visa CC"
         def addGCResult = giftCardService.provisionGiftCardWithNewCC(5.00, false, false, userToken, CreditCardService.CreditCardType.VISA)
 
         then:
         GiftCardService.validateNewGiftCardResult(addGCResult)
 
-        //Reload Existing GC
-        when:
+        when: "Reload Existing GC"
         def loadValuleresult = giftCardService.loadValueOnExistingGiftCard(userToken, addGCResult?.json?.cardId)
 
         then:
         loadValuleresult != null
 
-        //Update Card Balance
-        when:
+        when: "Update Card Balance"
         def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
 
         then:
