@@ -22,7 +22,8 @@ class ConfiguredApiClient extends ApiClient {
 	}
 
 	String getAccountManagementRequestEndpoint(){
-		getConfigurationPath("api", "address") + getConfigurationPath("api", "account_management_application")
+        String result = getConfigurationPath("api", "address")
+        return result + getConfigurationPath("api", "account_management_application")
 	}
 
 	String getOrderManagementRequestEndpoint(){

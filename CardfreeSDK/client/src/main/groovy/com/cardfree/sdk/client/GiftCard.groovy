@@ -1,9 +1,15 @@
 package com.cardfree.sdk.client
+import grails.util.Holders
 
 /**
  * Created by gabe on 3/19/15.
  */
 class GiftCard extends OauthClient{
+
+    public GiftCard() {
+        init(Holders.config)
+    }
+
 	def provisionGiftCard(String token, def data){
 		log.debug("Provision Gift Card")
 		executeMapiUserRequest("post", "gift-cards", data, token)
@@ -11,17 +17,6 @@ class GiftCard extends OauthClient{
 
 	def getAllGiftingGiftCardsForUser(String token){
 		executeMapiUserRequest("get", "gifting", null, token)
-	}
-
-	def setupAutoReloadSettings(String token, def giftCardId, String creditCardId, triggerAmount = 10, reloadAmount = 20){
-		def autoReloadData = [
-				enabled:true,
-				thresholdTriggerAmount:triggerAmount,
-				reloadAmount:reloadAmount,
-				paymentTypeCode:"CC",
-				paymentCreditCardId:creditCardId
-		]
-		executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token)
 	}
 
 	def addPhysicalGiftCard(String token, String cardNumber, String pin){

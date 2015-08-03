@@ -1,11 +1,16 @@
 package functional.test.suite
 
 import com.cardfree.sdk.client.CreditCard
+import grails.util.Holders
 
 class CreditCardService extends CreditCard{
 
     enum CreditCardType{
         VISA, MASTERCARD, AMEX
+    }
+
+    public CreditCardService() {
+        init(Holders.config)
     }
 
 	def addTestCreditCardToAccount(def token){

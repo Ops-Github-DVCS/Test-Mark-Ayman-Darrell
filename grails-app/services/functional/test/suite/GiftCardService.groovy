@@ -50,15 +50,20 @@ class GiftCardService extends GiftCard {
     }
 
 
-    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20){
+    def setupAutoReloadSettings(def token, def giftCardId, def creditCardId, triggerAmount = 10, reloadAmount = 20, def inputPassword = config.userInformation.password){
         def autoReloadData = [
             enabled:true,
             thresholdTriggerAmount:triggerAmount,
             reloadAmount:reloadAmount,
             paymentTypeCode:"CC",
-            paymentCreditCardId:creditCardId
+            paymentCreditCardId:creditCardId,
+                password: inputPassword
         ]
-        executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token)
+        executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token )
+    }
+
+    def autoReloadNotification(def token, def masterAccountId) {
+        executeMapiUserRequest("put", "userAccount/${masterAccountId}/autoReloadNotify", null, token);
     }
 
     def provisionGiftCard(def data, def token){
