@@ -29,4 +29,10 @@ class AccountManagement extends OauthClient{
 		log.debug("Get User Information")
 		return executeMapiUserRequest("get", "/", null, token)
 	}
+
+    def deliverOffer(String oAuthToken, String encryptedOfferString) {
+        println("   Deliver Offer")
+        return executeMapiUserRequest("post", "loyalty-reward-delivery", [promotionId: encryptedOfferString], oAuthToken)
+    }
+
 }
