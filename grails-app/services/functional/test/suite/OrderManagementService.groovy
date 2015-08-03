@@ -11,6 +11,16 @@ class OrderManagementService extends Order{
         init(Holders.config)
     }
 
+    def createOrderWithItem(def token, def orderItem ) {
+        TestOutputHelper.printServiceCall("Create Order")
+        def orderData = [
+                restaurantId: config.orderInformation.storeNumber,
+                storeNumber : config.orderInformation.storeNumber,
+                orderItem   : orderItem
+        ]
+        def orderResult = executeMapiUserRequest("post", "orders", orderData, token, false, null)
+        orderResult
+    }
 
     def createOrder(def token, def guest = false, def deviceIdentifier = null) {
         TestOutputHelper.printServiceCall("Create Order")
