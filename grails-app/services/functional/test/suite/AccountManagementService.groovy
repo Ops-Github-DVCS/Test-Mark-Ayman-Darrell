@@ -33,6 +33,12 @@ class AccountManagementService extends AccountManagement{
         executeRestRequest("put", "users/me/loyalty-id", getAccountManagementRequestEndpoint(), data, header, "application/json")
     }
 
+    def postOrderLoyaltyEvent(String oAuthToken, String orderId) {
+        def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
+        executeRestRequest("post", "users/me/orders/${config.orderInformation.storeNumber}-$orderId/loyalty-events", getAccountManagementRequestEndpoint(), [:], header, "application/json")
+
+    }
+
     def getUserAddress(String oAuthToken, int userAddressId) {
         def header = [Authorization: "bearer ${oAuthToken}", Accept: "application/json"]
         executeRestRequest("get", "users/me/address/${userAddressId}", getAccountManagementRequestEndpoint(), null, header, "application/json")
