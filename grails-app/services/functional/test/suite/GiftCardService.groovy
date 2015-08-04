@@ -62,8 +62,8 @@ class GiftCardService extends GiftCard {
         executeMapiUserRequest("put", "gift-cards/${giftCardId}/autoreload-settings", autoReloadData, token )
     }
 
-    def autoReloadNotification(def token, def masterAccountId) {
-        executeMapiUserRequest("put", "userAccount/${masterAccountId}/autoReloadNotify", null, token);
+    def autoReloadNotification(def masterAccountId) {
+        executeMapiClientRequest("put", "userAccount/${masterAccountId}/autoReloadNotify", null);
     }
 
     def provisionGiftCard(def data, def token){
