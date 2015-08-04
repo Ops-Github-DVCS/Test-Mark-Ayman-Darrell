@@ -687,6 +687,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
             svcBalanceAfterTransaction.json.balance // == 21.00
 
         when: "Update mapi Card Balance"
+        sleep(1000)
         def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
 
         then:
