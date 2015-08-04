@@ -297,12 +297,12 @@ testConfigurations{
             }
             id {
                 tacobell = "1699ecd1-88c5-4115-ad95-e5d26899d83b"
-                checkers = "D93B5A92DA0D11E3BF4B005056B046D7"
+                checkers = "2AB6DC9BD4DF11E4BFC9005056B07071"
                 peets = "9276F5AB5A3144C69C5AB058B9DBF2D5"
             }
             secret {
                 tacobell = "5e7abeda-27bb-49eb-b58e-edd456b4c477"
-                checkers = "D9556C1DDA0D11E3BF4B005056B046D7"
+                checkers = "2ACE7477D4DF11E4BFC9005056B07071"
                 peets = "DA08EAF725F14A52A2A6C360173F6F86"
             }
         }
@@ -324,7 +324,7 @@ testConfigurations{
         }
         svc {
             url {
-                defaultVal = "http://dev-cfr-app01.cardfree.net/CardfreeSVC/v1"
+                defaultVal = "http://uat-son-app03.cardfree.net/CardfreeSVC/v1"
             }
             username {
                 defaultVal = "resttest"
