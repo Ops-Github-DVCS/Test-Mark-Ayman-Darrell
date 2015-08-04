@@ -43,7 +43,7 @@ class GiftCard extends OauthClient{
 
 	def getGiftCardBalance(String token, String giftCardId){
 		log.debug("Get Gift Card Balance")
-		executeMapiUserRequest("get", "gift-cards/${giftCardId}", null, token)
+		executeMapiUserRequest("get", "gift-cards/${giftCardId}/balance", null, token)
 	}
 
 	def getGiftCardTransactionHistory(String token, String giftCardId){
