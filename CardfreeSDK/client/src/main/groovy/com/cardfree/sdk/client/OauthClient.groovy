@@ -25,6 +25,11 @@ class OauthClient extends ConfiguredApiClient {
         executeRestRequest("post", "users", getAccountManagementRequestEndpoint(), userData, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
     }
 
+    def executeMapiClientRequest(def operation, path, data = null) {
+        def header = [Authorization: "bearer ${getNonRegisteredOauthToken()}", Accept: "application/json"]
+        executeRestRequest(operation, path, getAccountManagementRequestEndpoint(), data, header, "application/vnd.cardfree.users+json; account-creation-type=cardfree")
+    }
+
     String getNonRegisteredOauthToken() {
         log.debug("Get unregistered oAuth Token")
         def data = [
