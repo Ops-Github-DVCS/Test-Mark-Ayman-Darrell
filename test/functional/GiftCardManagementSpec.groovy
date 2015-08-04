@@ -4,6 +4,7 @@ import functional.test.suite.CreditCardService
 import functional.test.suite.GiftCardService
 import functional.test.suite.OrderManagementService
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 
 class GiftCardManagementSpec extends FunctionalSpecBase{
 
@@ -630,4 +631,67 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         getGiftCards?.json?.data?.size() == 1
         !getGiftCards?.json?.data[0].cardId?.isEmpty()
     }
+
+    @IgnoreRest
+    def "Auto-reload"(){
+        when: "Create New User"
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then: "get a valid user"
+        AccountManagementService.validateNewUser(userResult)
+
+        when: "Login User"
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then: "valid token"
+        !userToken.isEmpty()
+
+        when: "Add GC to user using a newly added Visa CC"
+        def addCreditCardResult = creditCardService.addTestCreditCardToAccount(userToken)
+        def addGCResult = giftCardService.provisionGiftCardWithSavedCC(21.00, false, userToken, addCreditCardResult?.json?.creditCardId)
+
+        then:
+        GiftCardService.validateNewGiftCardResult(addGCResult)
+
+        when: "Set up auto reload"
+        def autoReloadUpdateResult = giftCardService.setupAutoReloadSettings(userToken, addGCResult.json.cardId, addCreditCardResult?.json?.creditCardId, 20, 20)
+
+        then:
+        autoReloadUpdateResult
+
+        when: "get svc balance"
+            def svcBalanceBeforeTransaction = mobileApiService.executeSVCRequest("get", "/accounts/$addGCResult.json.cardId/balance")
+        then: "initial load amount"
+            svcBalanceBeforeTransaction.json.balance == 21.00
+
+        when: "do a transaction"
+        def data = [
+            accountNumber: addGCResult.json.cardId,
+            transactionAmount: 2.00,
+            transactionCurrency: "USD",
+            transactionType: "TransactionAuthorization",
+//            merchantId: "999995", // uat
+            merchantId: "99997", // dev
+            transactionTime: new Date(),
+            tranCode: "8001"
+                ]
+        def postTXresponse = mobileApiService.executeSVCRequest("post", "/transactions", data)
+
+
+        then: "auto reload happens"
+        postTXresponse
+
+        when: "get svc balance"
+            def svcBalanceAfterTransaction = mobileApiService.executeSVCRequest("get", "/accounts/$addGCResult.json.cardId/balance")
+        then: "either original - purchase, or original - purchase + reload"
+            svcBalanceAfterTransaction.json.balance // == 21.00
+
+        when: "Update mapi Card Balance"
+        def getBalanceResult = giftCardService.getGiftCardBalance(userToken, addGCResult?.json?.cardId)
+
+        then:
+        getBalanceResult.json.amount == 39.00
+        getBalanceResult.status.statusCode == 200
+    }
+
 }
