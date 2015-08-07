@@ -435,16 +435,12 @@ class OrderManagementSpec extends FunctionalSpecBase{
         then:
         pickupOrderResult.status.statusCode == 200
 
-        //Get Offers
         when:
         def getOffersResult = offerService.getOffers(userToken, "2015-04-15T17:25:00-07:00");
 
         then:
         getOffersResult.status.statusCode == 200
 
-        //Refresh User Token
-        when:
-        userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
 
         then:
         !userToken.isEmpty()
@@ -478,7 +474,6 @@ class OrderManagementSpec extends FunctionalSpecBase{
         then:
         addItemToOrderResultAdditional.status.statusCode == 201
 
-        //Apply Offer
         when:
         def redemptionCode = getOffersResult?.json?.data[0].redemptionCode
         def applyOfferResultSecond = offerService.applyOffer(userToken, redemptionCode, orderData)
@@ -510,6 +505,7 @@ class OrderManagementSpec extends FunctionalSpecBase{
         pickupOrderResult.status.statusCode == 200
     }
 
+    @Ignore
     def "Submit order with with offer"(){
         //Create New User
         when:
@@ -655,5 +651,119 @@ class OrderManagementSpec extends FunctionalSpecBase{
 
         then:
         transactionHistoryResult != null
+    }
+
+    @Ignore
+    def "Pickup order with with kiip loyalty events"(){
+        //Create New User
+        when:
+        def userResult = accountManagementService.provisionNewRandomUser()
+
+        then:
+        AccountManagementService.validateNewUser(userResult)
+
+        //Login User
+        when:
+        def userToken = accountManagementService.getRegisteredUserToken(userResult.json.email, config.userInformation.password)
+
+        then:
+        !userToken.isEmpty()
+
+        when: "Opt-in to loyalty"
+            def getUserResult = accountManagementService.getUserInformation(userToken)
+
+        then:
+            getUserResult != null
+            getUserResult.json.loyaltyId
+
+        when:
+            def loyaltyId = UUID.randomUUID().toString()
+            def updateLoyaltyIdResult = accountManagementService.updateUserLoyaltyId(userToken, loyaltyId, true)
+
+        then:
+            updateLoyaltyIdResult != null
+
+        //Create Order
+        when:
+            def orderItem = [
+                        plu            : 22100,
+                        quantity       : 10,
+                        modifierOptions: [
+                                [plu: 2516, quantity: 1]
+                        ]
+                ]
+        def createOrderResult = orderManagementService.createOrderWithItem(userToken, orderItem)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        def creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        def submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Pickup Order
+        when:
+        def pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
+
+        then:
+        pickupOrderResult.status.statusCode == 200
+
+        when:
+            def loyaltyEvents = accountManagementService.postOrderLoyaltyEvent(userToken, createOrderResult?.json?.orderId)
+
+        then:
+            loyaltyEvents
+            loyaltyEvents.json.thirdPartyTokens.contains("Kiip10ItemMoment")
+
+
+        // Create SECOND Order
+        when:
+            orderItem = [
+                        plu            : 1013,
+                        quantity       : 1,
+                        modifierOptions: [ ]
+                ]
+        createOrderResult = orderManagementService.createOrderWithItem(userToken, orderItem)
+
+        then:
+        OrderManagementService.validateCreateOrderResponse(createOrderResult)
+
+        //Submit Order
+        when:
+        creditCardCheckoutDetails = creditCardService.visaCheckoutDetails
+        submitOrderResult = orderManagementService.submitOrderToStore(userToken, createOrderResult?.json?.orderId, creditCardCheckoutDetails)
+
+        then:
+        creditCardCheckoutDetails != null
+        OrderManagementService.validateSubmitOrderResponse(submitOrderResult)
+
+        //Pickup Order
+        when:
+        pickupOrderResult = orderManagementService.pickupOrder(userToken, null, createOrderResult?.json?.orderId)
+
+        then:
+        pickupOrderResult.status.statusCode == 200
+
+        when:
+            loyaltyEvents = accountManagementService.postOrderLoyaltyEvent(userToken, createOrderResult?.json?.orderId)
+
+        then:
+            loyaltyEvents.json.thirdPartyTokens.size() == 2
+            loyaltyEvents.json.thirdPartyTokens.contains("FakeKiipToken") // for 2nd order
+            // for 1013 daypart
+            loyaltyEvents.json.thirdPartyTokens.contains("KiipBreakfastMoment") ||
+            loyaltyEvents.json.thirdPartyTokens.contains("KiipLunchMoment") ||
+            loyaltyEvents.json.thirdPartyTokens.contains("KiipAfternoonMoment") ||
+            loyaltyEvents.json.thirdPartyTokens.contains("KiipDinnerMoment")
+
+            "KiipBreakfastMoment"
+            "KiipLunchMoment"
+            "KiipAfternoonMoment"
+            "KiipDinnerMoment"
     }
 }

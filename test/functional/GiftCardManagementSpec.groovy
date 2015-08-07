@@ -632,7 +632,7 @@ class GiftCardManagementSpec extends FunctionalSpecBase{
         !getGiftCards?.json?.data[0].cardId?.isEmpty()
     }
 
-    @IgnoreRest
+    @Ignore
     def "Auto-reload"(){
         when: "Create New User"
         def userResult = accountManagementService.provisionNewRandomUser()
